@@ -190,7 +190,9 @@ gulp.task('spec', ['scripts'], function(callback) {
     .pipe(_.istanbul.hookRequire())
     .on('finish', function() {
       gulp.src(globs.tests())
-        .pipe(_.mocha())
+        .pipe(_.mocha({
+          reporter: env.isTravis() ? 'spec' : 'nyan'
+        }))
         .pipe(_.istanbul.writeReports())
         .on('end', function() {
           var errOrNull = null;
