@@ -34,6 +34,7 @@
   },
   "homepage": "https://github.com/Asana/tsutil",
   "devDependencies": {
+    "chai": "^1.10.0",
     "del": "^1.1.1",
     "dts-bundle": "^0.2.0",
     "event-stream": "^3.2.1",
@@ -47,6 +48,7 @@
     "gulp-tslint": "^1.4.1",
     "gulp-typescript": "^2.3.0",
     "jshint-stylish": "^1.0.0",
+    "sinon": "^1.12.2",
     "typescript-formatter": "^0.1.4"
   }
 }
