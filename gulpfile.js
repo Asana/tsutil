@@ -83,8 +83,11 @@ globs = {
   build: val(function() {
     return '_build';
   }),
+  bundle: val(function() {
+    return 'index.d.ts';
+  }),
   dist: val(function() {
-    return 'dist';
+    return process.cwd();
   }),
   dts: val(function() {
     return [
@@ -111,17 +114,38 @@ globs = {
   ts: val(function() {
     return path.join(
       '{' + globs.src() + ',' + globs.test() + '}', '**', '*.ts');
-  })
+  }),
+  types: val(function() {
+    return path.join(globs.build(), globs.src(), '**', '*.d.ts');
+  }),
 };
+
+/**
+ * Creates a single type definition for the package
+ */
+gulp.task('bundle', ['copy'], function() {
+  _.dtsBundle.bundle({
+    main: globs.bundle(),
+    name: 'tsutil',
+    prefix: ''
+  });
+});
 
 /**
  * Cleans the build artifacts
  */
 gulp.task('clean', function(callback) {
-  _.del([
-    globs.build(),
-    globs.dist()
-  ], callback);
+  _.del(globs.build(), callback);
+});
+
+/**
+ * Copys the scripts into the dist directory
+ */
+gulp.task('copy', function() {
+  gulp.src([
+    globs.scripts(),
+    globs.types()
+  ]).pipe(gulp.dest(globs.dist()));
 });
 
 /**
