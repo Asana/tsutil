@@ -18,16 +18,35 @@
     "structures",
     "collections"
   ],
-  "contributors": [{
-    "name": "Daniel Phan",
-    "email": "daniel@asana.com"
-  }, {
-    "name": "Phips Peter",
-    "email": "phips@asana.com"
-  }],
+  "contributors": [
+    {
+      "name": "Daniel Phan",
+      "email": "daniel@asana.com"
+    },
+    {
+      "name": "Phips Peter",
+      "email": "phips@asana.com"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Asana/tsutil/issues"
   },
-  "homepage": "https://github.com/Asana/tsutil"
+  "homepage": "https://github.com/Asana/tsutil",
+  "devDependencies": {
+    "del": "^1.1.1",
+    "dts-bundle": "^0.2.0",
+    "event-stream": "^3.2.1",
+    "glob": "^4.3.5",
+    "gulp": "^3.8.10",
+    "gulp-if": "^1.2.5",
+    "gulp-istanbul": "^0.5.0",
+    "gulp-jshint": "^1.9.0",
+    "gulp-load-plugins": "^0.8.0",
+    "gulp-mocha": "^2.0.0",
+    "gulp-tslint": "^1.4.1",
+    "gulp-typescript": "^2.3.0",
+    "jshint-stylish": "^1.0.0",
+    "typescript-formatter": "^0.1.4"
+  }
 }
