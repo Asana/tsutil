@@ -192,7 +192,18 @@ gulp.task('spec', ['scripts'], function(callback) {
       gulp.src(globs.tests())
         .pipe(_.mocha())
         .pipe(_.istanbul.writeReports())
-        .on('end', callback);
+        .on('end', function() {
+          var errOrNull = null;
+          var coverage = _.istanbul.summarizeCoverage();
+          var incomplete = Object.keys(coverage).filter(function(key) {
+            return coverage[key].pct !== 100;
+          });
+          if (incomplete.length > 0) {
+            errOrNull = new Error(
+              'Incomplete coverage for ' + incomplete.join(', '));
+          }
+          callback(errOrNull);
+        });
     });
 });
 
