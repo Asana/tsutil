@@ -1,0 +1,11 @@
+before_install:
+- npm install -g tsd
+- tsd reinstall --overwrite
+cache:
+  directories:
+  - node_modules
+  - typings
+language: node_js
+node_js:
+  - "0.10"
+sudo: false
