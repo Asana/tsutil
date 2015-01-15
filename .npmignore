@@ -1,0 +1,12 @@
+.idea
+_build
+coverage
+src
+test
+typings
+.gitignore
+.jshintrc
+.travis.yml
+gulpfile.js
+tsd.json
+tslint.json

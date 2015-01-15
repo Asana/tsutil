@@ -1,9 +1,10 @@
 {
   "name": "tsutil",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "TypeScript Utility Data Structures",
   "main": "dist/index.js",
   "scripts": {
+    "bundle": "gulp bundle",
     "test": "gulp test"
   },
   "repository": {
