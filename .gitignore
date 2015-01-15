@@ -26,3 +26,13 @@ node_modules
 
 # Users Environment Variables
 .lock-wscript
+
+# TypeScript
+typings
+
+# Artifacts
+_build
+dist
+
+# IntelliJ
+.idea
