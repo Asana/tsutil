@@ -142,7 +142,7 @@ gulp.task('clean', function(callback) {
  * Copys the scripts into the dist directory
  */
 gulp.task('copy', ['scripts'], function() {
-  gulp.src([
+  return gulp.src([
     globs.scripts(),
     globs.types()
   ]).pipe(gulp.dest(globs.dist()));
