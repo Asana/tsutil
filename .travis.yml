@@ -7,5 +7,17 @@ cache:
   - typings
 language: node_js
 node_js:
-  - "0.10"
+- '0.10'
 sudo: false
+before_deploy:
+- npm run bundle
+deploy:
+  provider: npm
+  email: pspeter333@gmail.com
+  skip_cleanup: true
+  api_key:
+    secure: ei6thLUz14hk3Eu0Np3bXRozZSD/N/JyLjw0F8I62pdqSsd892dIglBK28VtJHvsxGNoiSQYErAOCWAG2EI9U3XDr6z+xPnBtsI+sPXPyKk4KTToMWz7Qb9W31GgqJzmhebw0mEJccpNj5MrK5aUPie25/ttvNZN95SnnCr8QV0=
+  on:
+    tags: true
+    repo: Asana/tsutil
+    branch: master
