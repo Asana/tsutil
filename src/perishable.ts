@@ -1,24 +1,50 @@
 import Handle = require("./handle");
 
-class PerishableNode<T> implements Handle<T> {
+interface PerishableNodePointer<T> {
+    next(): PerishableNode<T>;
+    setNext(node: PerishableNode<T>): void;
+}
+
+class PerishableSentinel<T> implements PerishableNodePointer<T> {
+    private _next: PerishableNode<T>;
+    private _onUnused: () => any;
+
+    constructor(onUnused: () => any) {
+        this._next = null;
+        this._onUnused = onUnused;
+    }
+
+    isUnused(): boolean {
+        return this._next === null;
+    }
+
+    next(): PerishableNode<T> {
+        return this._next;
+    }
+
+    setNext(node: PerishableNode<T>): void {
+        this._next = node;
+        if (this._next === null && this._onUnused) {
+            this._onUnused();
+        }
+    }
+}
+
+class PerishableNode<T> implements Handle<T>, PerishableNodePointer<T> {
     private _value: T;
     private _onStale: () => any;
-    _prev: PerishableNode<T>;
+    _prev: PerishableNodePointer<T>;
     _next: PerishableNode<T>;
 
-    constructor(value: T, onStale: () => any = null, prev: PerishableNode<T> = null) {
+    constructor(value: T, onStale: () => any, prev: PerishableNodePointer<T>) {
         this._value = value;
         this._onStale = onStale;
         this._prev = prev;
-        this._next = null;
-        if (this.hasPrev()) {
-            this._next = this._prev._next;
-            this._prev._next = this;
-            if (this.hasNext()) {
-                this._next._prev = this;
-            }
+        this._next = this._prev.next();
+        this._prev.setNext(this);
+        if (this.hasNext()) {
+            this._next._prev = this;
         }
-
     }
 
     value(): T {
@@ -26,14 +52,18 @@ class PerishableNode<T> implements Handle<T> {
     }
 
     release(): void {
-        this._prev._next = this._next;
+        this._prev.setNext(this._next);
         if (this.hasNext()) {
             this._next._prev = this._prev;
         }
     }
 
-    hasPrev(): boolean {
-        return this._prev !== null;
+    next(): PerishableNode<T> {
+        return this._next;
+    }
+
+    setNext(node: PerishableNode<T>): void {
+        this._next = node;
     }
 
     hasNext(): boolean {
@@ -41,7 +71,7 @@ class PerishableNode<T> implements Handle<T> {
     }
 
     onStale(): void {
-        if (this._onStale !== null) {
+        if (this._onStale) {
             this._onStale();
         }
     }
@@ -54,7 +84,7 @@ class Perishable<T> {
     private _value: T;
     private _onUnused: () => any;
     private _isStale: boolean;
-    private _head: PerishableNode<T>;
+    private _sentinel: PerishableSentinel<T>;
 
     /**
      * Create a new perishable
@@ -65,7 +95,7 @@ class Perishable<T> {
         this._value = value;
         this._onUnused = onUnused;
         this._isStale = false;
-        this._head = new PerishableNode<T>(null);
+        this._sentinel = new PerishableSentinel<T>(this._onUnused);
     }
 
     /**
@@ -89,7 +119,7 @@ class Perishable<T> {
      * @returns {boolean}
      */
     isUnused(): boolean {
-        return !this._head.hasNext();
+        return this._sentinel.isUnused();
     }
 
     /**
@@ -101,7 +131,7 @@ class Perishable<T> {
         if (this.isStale()) {
             throw new Error("Cannot createHandle when stale");
         }
-        return new PerishableNode<T>(this._value, onStale, this._head);
+        return new PerishableNode<T>(this._value, onStale, this._sentinel);
     }
 
     /**
@@ -109,13 +139,14 @@ class Perishable<T> {
      */
     makeStale(): void {
         if (!this.isStale()) {
-            var iterator = this._head._next;
+            var iterator: PerishableNode<T>;
+            iterator = (<PerishableNode<T>>this._sentinel.next());
             while (iterator !== null) {
                 iterator.onStale();
-                iterator = iterator._next;
+                iterator = (<PerishableNode<T>>iterator.next());
             }
             this._isStale = true;
-            this._head = null;
+            this._sentinel = null;
         }
     }
 }
