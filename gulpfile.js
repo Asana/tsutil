@@ -278,5 +278,5 @@ gulp.task('typedoc', ['clean'], function() {
       out: globs.doc(),
       target: 'ES5',
       theme: 'minimal'
-    }))
+    }));
 });
