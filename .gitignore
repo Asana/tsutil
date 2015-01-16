@@ -32,7 +32,8 @@ typings
 
 # Artifacts
 _build
-dist
+_cache
+doc
 
 # IntelliJ
 .idea
