@@ -90,14 +90,14 @@ globs = {
   bundle: val(function() {
     return 'index.d.ts';
   }),
-  cache: val(function() {
-    return '_cache';
-  }),
   dist: val(function() {
     return process.cwd();
   }),
   doc: val(function() {
     return 'doc';
+  }),
+  docs: val(function() {
+    return path.join(globs.doc(), '**', '*');
   }),
   dts: val(function() {
     return [
@@ -196,10 +196,8 @@ gulp.task('jshint', function() {
  * Pushes to github pages
  */
 gulp.task('pages', ['typedoc'], function() {
-  return gulp.src(globs.doc())
-    .pipe(_.ghPages({
-      cacheDir: globs.cache()
-    }));
+  return gulp.src(globs.docs())
+    .pipe(_.ghPages());
 });
 
 /**
