@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "bundle": "gulp bundle",
+    "doc": "gulp doc",
     "test": "gulp test"
   },
   "repository": {
@@ -41,12 +42,14 @@
     "event-stream": "^3.2.1",
     "glob": "^4.3.5",
     "gulp": "^3.8.10",
+    "gulp-gh-pages": "^0.4.0",
     "gulp-if": "^1.2.5",
     "gulp-istanbul": "^0.5.0",
     "gulp-jshint": "^1.9.0",
     "gulp-load-plugins": "^0.8.0",
     "gulp-mocha": "^2.0.0",
     "gulp-tslint": "^1.4.1",
+    "gulp-typedoc": "^1.0.5",
     "gulp-typescript": "^2.3.0",
     "jshint-stylish": "^1.0.0",
     "sinon": "^1.12.2",

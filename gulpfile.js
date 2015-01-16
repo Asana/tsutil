@@ -5,6 +5,7 @@ var path = require('path');
 /**
  * High Level Tasks
  */
+gulp.task('doc', ['pages']);
 gulp.task('lint', ['jshint', 'tslint']);
 gulp.task('test', ['lint', 'spec']);
 
@@ -57,6 +58,9 @@ env = {
   isTravis: val(function() {
     return process.env.TRAVIS !== undefined;
   }),
+  name: val(function() {
+    return 'tsutil';
+  }),
   project: val(function() {
     return _.typescript.createProject({
       declarationFiles: true,
@@ -89,6 +93,12 @@ globs = {
   dist: val(function() {
     return process.cwd();
   }),
+  doc: val(function() {
+    return 'doc';
+  }),
+  docs: val(function() {
+    return path.join(globs.doc(), '**', '*');
+  }),
   dts: val(function() {
     return [
       globs.ts(),
@@ -98,6 +108,9 @@ globs = {
   }),
   gulp: val(function() {
     return 'gulpfile.js';
+  }),
+  lib: val(function() {
+    return path.join(globs.src(), '**', '*.ts');
   }),
   scripts: val(function() {
     return path.join(globs.build(), globs.src(), '**', '*.js');
@@ -126,7 +139,7 @@ globs = {
 gulp.task('bundle', ['copy'], function() {
   _.dtsBundle.bundle({
     main: globs.bundle(),
-    name: 'tsutil',
+    name: env.name(),
     prefix: ''
   });
 });
@@ -135,7 +148,10 @@ gulp.task('bundle', ['copy'], function() {
  * Cleans the build artifacts
  */
 gulp.task('clean', function(callback) {
-  _.del(globs.build(), callback);
+  _.del([
+    globs.build(),
+    globs.doc()
+  ], callback);
 });
 
 /**
@@ -176,6 +192,13 @@ gulp.task('jshint', function() {
     .pipe(_.if(env.isTest(), _.jshint.reporter('fail')));
 });
 
+/**
+ * Pushes to github pages
+ */
+gulp.task('pages', ['typedoc'], function() {
+  return gulp.src(globs.docs())
+    .pipe(_.ghPages());
+});
 
 /**
  * Processes the TypeScript files
@@ -241,5 +264,19 @@ gulp.task('tslint', function() {
     .pipe(_.tslint())
     .pipe(_.tslint.report({
       emitError: env.isTest()
+    }));
+});
+
+/**
+ * Generates documentation
+ */
+gulp.task('typedoc', ['clean'], function() {
+  return gulp.src(globs.lib())
+    .pipe(_.typedoc({
+      module: 'commonjs',
+      name: env.name(),
+      out: globs.doc(),
+      target: 'ES5',
+      theme: 'minimal'
     }));
 });

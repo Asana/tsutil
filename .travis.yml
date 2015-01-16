@@ -20,3 +20,5 @@ deploy:
   on:
     branch: master
     repo: Asana/tsutil
+after_deploy:
+- npm run doc
