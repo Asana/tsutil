@@ -12,6 +12,13 @@ describe("Perishable", () => {
             var perishable = new tsutil.Perishable(VALUE, null);
             assert.instanceOf(perishable, tsutil.Perishable);
         });
+
+        it("should call onUnused", () => {
+            var spy = sinon.spy();
+            var perishable = new tsutil.Perishable(VALUE, spy);
+            perishable.createHandle(null).release();
+            sinon.assert.calledOnce(spy);
+        });
     });
 
     describe("value", () => {
