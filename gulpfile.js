@@ -61,6 +61,9 @@ env = {
   name: val(function() {
     return 'tsutil';
   }),
+  pagesUrl: val(function() {
+    return process.env.PAGES_URL;
+  }),
   project: val(function() {
     return _.typescript.createProject({
       declarationFiles: true,
@@ -197,7 +200,9 @@ gulp.task('jshint', function() {
  */
 gulp.task('pages', ['typedoc'], function() {
   return gulp.src(globs.docs())
-    .pipe(_.ghPages());
+    .pipe(_.ghPages({
+      remoteUrl: env.pagesUrl()
+    }));
 });
 
 /**
