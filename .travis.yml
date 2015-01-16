@@ -21,6 +21,6 @@ deploy:
     branch: master
     repo: Asana/tsutil
 after_deploy:
-- git config user.email "git@asana.com"
-- git config user.name "Asana"
+- git config --global user.email "git@asana.com"
+- git config --global user.name "Asana"
 - npm run doc
