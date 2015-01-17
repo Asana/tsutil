@@ -4,8 +4,9 @@
   "description": "TypeScript Utility Data Structures",
   "main": "dist/index.js",
   "scripts": {
+    "bundle": "gulp bundle",
     "doc": "gulp doc",
-    "prepublish": "if [[ -n ${TRAVIS} ]]; then gulp bundle; fi",
+    "prepublish": "ls",
     "test": "gulp test"
   },
   "repository": {
