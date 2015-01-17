@@ -44,7 +44,7 @@ class Optional<T> {
     }
 
     /**
-     * Return a new option based on whether or not the value matches the filter
+     * Return an option based on whether or not the value matches the filter
      * @param filterer A filter function to check the value against
      * @returns {*}
      */
@@ -113,7 +113,7 @@ class Optional<T> {
     }
 
     /**
-     * Retrives the value and falls back to another option
+     * Retrieves the value and falls back to another option
      * @param other The fallback option accessor
      * @returns {*}
      */
