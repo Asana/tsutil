@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "doc": "gulp doc",
-    "prepublish": "gulp bundle",
+    "prepublish": "if [[ -n ${TRAVIS} ]]; then gulp bundle; fi",
     "test": "gulp test"
   },
   "repository": {
