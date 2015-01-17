@@ -11,6 +11,7 @@ node_js:
 sudo: false
 before_deploy:
 - npm run bundle
+- ls
 deploy:
   provider: npm
   email: pspeter333@gmail.com
