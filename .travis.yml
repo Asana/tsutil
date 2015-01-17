@@ -9,9 +9,6 @@ language: node_js
 node_js:
 - '0.10'
 sudo: false
-before_deploy:
-- npm run bundle
-- ls
 deploy:
   provider: npm
   email: pspeter333@gmail.com
