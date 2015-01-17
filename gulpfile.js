@@ -93,6 +93,9 @@ globs = {
   bundle: val(function() {
     return 'index.d.ts';
   }),
+  coverage: val(function() {
+    return path.join('coverage', '**', 'lcov.info');
+  }),
   dist: val(function() {
     return process.cwd();
   }),
@@ -165,6 +168,14 @@ gulp.task('copy', ['scripts'], function() {
     globs.scripts(),
     globs.types()
   ]).pipe(gulp.dest(globs.dist()));
+});
+
+/**
+ * Reports the coverage to coveralls
+ */
+gulp.task('coverage', ['spec'], function() {
+  return gulp.src(globs.coverage())
+    .pipe(_.coveralls());
 });
 
 /**
