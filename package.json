@@ -4,8 +4,8 @@
   "description": "TypeScript Utility Data Structures",
   "main": "dist/index.js",
   "scripts": {
-    "bundle": "gulp bundle",
     "doc": "gulp doc",
+    "prepublish": "gulp bundle",
     "test": "gulp test"
   },
   "repository": {
