@@ -1,4 +1,4 @@
-# tsutil [![Build Status][travis-image]][travis-url] [![NPM Version][npm-image]][npm-url]
+# tsutil [![NPM Version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Code Coverage][coveralls-image]][coveralls-url]
 
 TypeScript Utility Data Structures.
 
@@ -34,10 +34,13 @@ npm install
 npm test
 ```
 
+[npm-url]: https://www.npmjs.org/package/tsutil
+[npm-image]: http://img.shields.io/npm/v/tsutil.svg?style=flat-square
+
 [travis-url]: http://travis-ci.org/Asana/tsutil
 [travis-image]: http://img.shields.io/travis/Asana/tsutil.svg?style=flat-square
 
-[npm-url]: https://www.npmjs.org/package/tsutil
-[npm-image]: http://img.shields.io/npm/v/tsutil.svg?style=flat-square
+[coveralls-url]: https://coveralls.io/r/Asana/tsutil
+[coveralls-image]: https://img.shields.io/coveralls/Asana/tsutil/master.svg?style-flat-square
 
 [doc]: http://asana.github.io/tsutil
