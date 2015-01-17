@@ -7,7 +7,7 @@ var path = require('path');
  */
 gulp.task('doc', ['pages']);
 gulp.task('lint', ['jshint', 'tslint']);
-gulp.task('test', ['lint', 'spec']);
+gulp.task('test', ['coverage', 'lint']);
 
 /**
  * Gulpfile variables
