@@ -2,7 +2,11 @@
   "name": "tsutil",
   "version": "1.0.3",
   "description": "TypeScript Utility Data Structures",
-  "main": "dist/index.js",
+  "main": "index.js",
+  "files": [
+    "*.js",
+    "*.dts"
+  ],
   "scripts": {
     "bundle": "gulp bundle",
     "doc": "gulp doc",
