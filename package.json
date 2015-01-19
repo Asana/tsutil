@@ -5,12 +5,11 @@
   "main": "index.js",
   "files": [
     "*.js",
-    "*.dts"
+    "*.d.ts"
   ],
   "scripts": {
     "bundle": "gulp bundle",
     "doc": "gulp doc",
-    "prepublish": "ls",
     "test": "gulp test"
   },
   "repository": {
