@@ -12,6 +12,15 @@ class Optional<T> {
         return typeof value === "undefined" || value === null;
     }
 
+    public static flatten<T>(optionals: Optional<T>[]): T[] {
+        return optionals.reduce((acc, elem) => {
+            elem.forEach((value: T) => {
+                acc.push(value);
+            });
+            return acc;
+        }, []);
+    }
+
     private _value: T;
 
     /**

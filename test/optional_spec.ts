@@ -8,6 +8,17 @@ describe("Optional", () => {
     var VALUE = "asana";
     var OTHER = "luna";
 
+    describe("#flatten", () => {
+        it("should only include non empty optionals", () => {
+            var optionals = [
+                new tsutil.Optional(2),
+                tsutil.Optional.NONE,
+                new tsutil.Optional(1)
+            ];
+            assert.deepEqual(tsutil.Optional.flatten(optionals), [2, 1]);
+        });
+    });
+
     describe("constructor", () => {
         it("should return NONE for undefined", () => {
             assert.equal(new tsutil.Optional<any>(undefined), tsutil.Optional.NONE);
