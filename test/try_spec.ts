@@ -15,6 +15,20 @@ describe("Try", () => {
     };
     var ERR = new Error();
 
+    describe("#all", () => {
+        it("should return all of the values if there is not an exception", () => {
+            var t = tsutil.Try.success(VALUE);
+            var k = tsutil.Try.success(OTHER);
+            assert.deepEqual(tsutil.Try.all([t, k]).getOrThrow(), [VALUE, OTHER]);
+        });
+
+        it("should throw if there is an exception", () => {
+            var t = tsutil.Try.success(VALUE);
+            var k = tsutil.Try.failure(ERR);
+            assert.isTrue(tsutil.Try.all([t, k]).isFailure());
+        });
+    });
+
     describe("#attempt", () => {
         it("should return a value if successful", () => {
             var t = tsutil.Try.attempt(VALUE_ACCESSOR);
