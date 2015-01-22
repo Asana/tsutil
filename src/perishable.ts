@@ -1,30 +1,47 @@
 import Handle = require("./handle");
 
+interface PerishableNodeIterator<T> {
+    callback: () => any;
+    next: PerishableNode<T>;
+}
+
 class PerishableNode<T> implements Handle<T> {
-    private _value: T;
-    private _callback: () => any;
-    private _prev: PerishableNode<T>;
-    private _next: PerishableNode<T>;
+    _value: T;
+    _callback: () => any;
+    _prev: PerishableNode<T>;
+    _next: PerishableNode<T>;
 
     constructor(value: T, callback: () => any, prev: PerishableNode<T> = null) {
         this._value = value;
         this._callback = callback;
         this._prev = prev;
         this._next = null;
-        if (this.hasPrev()) {
-            this._next = this._prev._next;
-            this._prev._next = this;
+        if (this._hasPrev()) {
+            this._setNext(this._prev._next);
+            this._prev._setNext(this);
         }
-        if (this.hasNext()) {
-            this._next._prev = this;
+        if (this._hasNext()) {
+            this._next._setPrev(this);
         }
     }
 
-    hasPrev(): boolean {
+    _setPrev(prev: PerishableNode<T>): void {
+        this._prev = prev;
+    }
+
+    _setNext(next: PerishableNode<T>): void {
+        this._next = next;
+        // We only automatically call the callback when the head is unused
+        if (!this._hasPrev() && !this._hasNext()) {
+            this._callback();
+        }
+    }
+
+    _hasPrev(): boolean {
         return this._prev !== null;
     }
 
-    hasNext(): boolean {
+    _hasNext(): boolean {
         return this._next !== null;
     }
 
@@ -33,20 +50,10 @@ class PerishableNode<T> implements Handle<T> {
     }
 
     release(): void {
-        if (this.hasPrev()) {
-            this._prev._next = this._next;
+        this._prev._setNext(this._next);
+        if (this._hasNext()) {
+            this._next._setPrev(this._prev);
         }
-        if (this.hasNext()) {
-            this._next._prev = this._prev;
-        }
-    }
-
-    pop(): void {
-        if (this.hasNext()) {
-            this._next.pop();
-            this._next = null;
-        }
-        this._callback();
     }
 }
 
@@ -88,7 +95,7 @@ class Perishable<T> {
      * @returns {boolean}
      */
     isUnused(): boolean {
-        return this.isStale() || !this._head.hasNext();
+        return this.isStale() || !this._head._hasNext();
     }
 
     /**
@@ -108,8 +115,16 @@ class Perishable<T> {
      */
     makeStale(): void {
         if (!this.isStale()) {
-            this._head.pop();
+            var node = this._head;
             this._head = null;
+            var callbacks: Function[] = [];
+            while (node !== null) {
+                callbacks.push(node._callback);
+                node = node._next;
+            }
+            for (var i = callbacks.length - 1; i >= 0; i--) {
+                callbacks[i]();
+            }
         }
     }
 }
