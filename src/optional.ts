@@ -12,6 +12,11 @@ class Optional<T> {
         return typeof value === "undefined" || value === null;
     }
 
+    /**
+     * Flattens an array of optionals by filtering out the empty optionals
+     * @param optionals The list of optionals to flatten
+     * @returns {T{]}
+     */
     public static flatten<T>(optionals: Optional<T>[]): T[] {
         return optionals.reduce((acc, elem) => {
             elem.forEach((value: T) => {

@@ -8,6 +8,20 @@ class Try<T> {
     private _value: T;
 
     /**
+     * Attempts to flatten an array of tries
+     * @param tries The list of tries to flatten
+     * @returns {Try<T[]>}
+     */
+    static all<T>(tries: Try<T>[]): Try<T[]> {
+        return Try.attempt<T[]>(() => {
+            return tries.reduce((acc, elem) => {
+                acc.push(elem.getOrThrow());
+                return acc;
+            }, []);
+        });
+    }
+
+    /**
      * Attemps a function and returns a Try for its success
      * @param fn The function to attempt
      * @returns {Try<T>}
