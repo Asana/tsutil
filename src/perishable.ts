@@ -1,50 +1,48 @@
 import Handle = require("./handle");
 
-interface PerishableNodePointer<T> {
-    next(): PerishableNode<T>;
-    setNext(node: PerishableNode<T>): void;
+interface PerishableNodeIterator<T> {
+    callback: () => any;
+    next: PerishableNode<T>;
 }
 
-class PerishableSentinel<T> implements PerishableNodePointer<T> {
-    private _next: PerishableNode<T>;
-    private _onUnused: () => any;
-
-    constructor(onUnused: () => any) {
-        this._next = null;
-        this._onUnused = onUnused;
-    }
-
-    isUnused(): boolean {
-        return this._next === null;
-    }
-
-    next(): PerishableNode<T> {
-        return this._next;
-    }
-
-    setNext(node: PerishableNode<T>): void {
-        this._next = node;
-        if (this._next === null && this._onUnused) {
-            this._onUnused();
-        }
-    }
-}
-
-class PerishableNode<T> implements Handle<T>, PerishableNodePointer<T> {
-    private _value: T;
-    private _onStale: () => any;
-    _prev: PerishableNodePointer<T>;
+class PerishableNode<T> implements Handle<T> {
+    _value: T;
+    _callback: () => any;
+    _prev: PerishableNode<T>;
     _next: PerishableNode<T>;
 
-    constructor(value: T, onStale: () => any, prev: PerishableNodePointer<T>) {
+    constructor(value: T, callback: () => any, prev: PerishableNode<T> = null) {
         this._value = value;
-        this._onStale = onStale;
+        this._callback = callback;
         this._prev = prev;
-        this._next = this._prev.next();
-        this._prev.setNext(this);
-        if (this.hasNext()) {
-            this._next._prev = this;
+        this._next = null;
+        if (this._hasPrev()) {
+            this._setNext(this._prev._next);
+            this._prev._setNext(this);
         }
+        if (this._hasNext()) {
+            this._next._setPrev(this);
+        }
+    }
+
+    _setPrev(prev: PerishableNode<T>): void {
+        this._prev = prev;
+    }
+
+    _setNext(next: PerishableNode<T>): void {
+        this._next = next;
+        // We only automatically call the callback when the head is unused
+        if (!this._hasPrev() && !this._hasNext()) {
+            this._callback();
+        }
+    }
+
+    _hasPrev(): boolean {
+        return this._prev !== null;
+    }
+
+    _hasNext(): boolean {
+        return this._next !== null;
     }
 
     value(): T {
@@ -52,27 +50,9 @@ class PerishableNode<T> implements Handle<T>, PerishableNodePointer<T> {
     }
 
     release(): void {
-        this._prev.setNext(this._next);
-        if (this.hasNext()) {
-            this._next._prev = this._prev;
-        }
-    }
-
-    next(): PerishableNode<T> {
-        return this._next;
-    }
-
-    setNext(node: PerishableNode<T>): void {
-        this._next = node;
-    }
-
-    hasNext(): boolean {
-        return this._next !== null;
-    }
-
-    onStale(): void {
-        if (this._onStale) {
-            this._onStale();
+        this._prev._setNext(this._next);
+        if (this._hasNext()) {
+            this._next._setPrev(this._prev);
         }
     }
 }
@@ -82,9 +62,7 @@ class PerishableNode<T> implements Handle<T>, PerishableNodePointer<T> {
  */
 class Perishable<T> {
     private _value: T;
-    private _onUnused: () => any;
-    private _isStale: boolean;
-    private _sentinel: PerishableSentinel<T>;
+    private _head: PerishableNode<T>;
 
     /**
      * Create a new perishable
@@ -93,9 +71,7 @@ class Perishable<T> {
      */
     constructor(value: T, onUnused: () => any) {
         this._value = value;
-        this._onUnused = onUnused;
-        this._isStale = false;
-        this._sentinel = new PerishableSentinel<T>(this._onUnused);
+        this._head = new PerishableNode<T>(value, onUnused);
     }
 
     /**
@@ -111,7 +87,7 @@ class Perishable<T> {
      * @returns {boolean}
      */
     isStale(): boolean {
-        return this._isStale;
+        return this._head === null;
     }
 
     /**
@@ -119,7 +95,7 @@ class Perishable<T> {
      * @returns {boolean}
      */
     isUnused(): boolean {
-        return this._sentinel.isUnused();
+        return this.isStale() || !this._head._hasNext();
     }
 
     /**
@@ -131,7 +107,7 @@ class Perishable<T> {
         if (this.isStale()) {
             throw new Error("Cannot createHandle when stale");
         }
-        return new PerishableNode<T>(this._value, onStale, this._sentinel);
+        return new PerishableNode<T>(this._value, onStale, this._head);
     }
 
     /**
@@ -139,14 +115,16 @@ class Perishable<T> {
      */
     makeStale(): void {
         if (!this.isStale()) {
-            var iterator: PerishableNode<T>;
-            iterator = (<PerishableNode<T>>this._sentinel.next());
-            while (iterator !== null) {
-                iterator.onStale();
-                iterator = (<PerishableNode<T>>iterator.next());
+            var node = this._head;
+            this._head = null;
+            var callbacks: Function[] = [];
+            while (node !== null) {
+                callbacks.push(node._callback);
+                node = node._next;
             }
-            this._isStale = true;
-            this._sentinel = null;
+            for (var i = callbacks.length - 1; i >= 0; i--) {
+                callbacks[i]();
+            }
         }
     }
 }
