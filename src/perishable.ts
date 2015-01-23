@@ -1,10 +1,5 @@
 import Handle = require("./handle");
 
-interface PerishableNodeIterator<T> {
-    callback: () => any;
-    next: PerishableNode<T>;
-}
-
 class PerishableNode<T> implements Handle<T> {
     _value: T;
     _callback: () => any;
