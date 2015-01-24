@@ -22,7 +22,7 @@ class Try<T> {
     }
 
     /**
-     * Attemps a function and returns a Try for its success
+     * Attempts a function and returns a Try for its success
      * @param fn The function to attempt
      * @returns {Try<T>}
      */
