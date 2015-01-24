@@ -72,12 +72,10 @@ describe("Try", () => {
         });
 
         it("should return a value if successful, with a negative filter", () => {
-            assert.throws(() => {
-                var t = tsutil.Try.create(VALUE_ACCESSOR, () => {
-                    return false;
-                });
-                assert.equal(t.getOrThrow(), VALUE);
+            var t = tsutil.Try.create(VALUE_ACCESSOR, () => {
+                return false;
             });
+            assert.equal(t.getOrThrow(), VALUE);
         });
     });
 
