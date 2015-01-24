@@ -41,23 +41,9 @@ describe("Try", () => {
             });
             assert.equal(t.error(), ERR);
         });
-    });
-
-    describe("#create", () => {
-        it("should return a value if successful", () => {
-            var t = tsutil.Try.create(VALUE_ACCESSOR);
-            assert.equal(t.getOrThrow(), VALUE);
-        });
-
-        it("should handle throwing an error", () => {
-            var t = tsutil.Try.create(() => {
-                throw ERR;
-            });
-            assert.equal(t.error(), ERR);
-        });
 
         it("should handle a positive filter", () => {
-            var t = tsutil.Try.create(() => {
+            var t = tsutil.Try.attempt(() => {
                 throw ERR;
             }, () => { return true; });
             assert.equal(t.error(), ERR);
@@ -65,10 +51,17 @@ describe("Try", () => {
 
         it("should handle a negative filter", () => {
             assert.throws(() => {
-                tsutil.Try.create(() => {
+                tsutil.Try.attempt(() => {
                     throw ERR;
                 }, () => { return false; });
             });
+        });
+
+        it("should return a value if successful, with a negative filter", () => {
+            var t = tsutil.Try.attempt(VALUE_ACCESSOR, () => {
+                return false;
+            });
+            assert.equal(t.getOrThrow(), VALUE);
         });
     });
 
