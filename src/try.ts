@@ -24,23 +24,22 @@ class Try<T> {
     /**
      * Attempts a function and returns a Try for its success
      * @param fn The function to attempt
+     * @param filter? If provided, any errors not matched by filter are thrown.
+     *   Otherwise, all errors encountered during the execution of fn will be
+     *   caught and stored.
      * @returns {Try<T>}
      */
-    static attempt<T>(fn: () => T): Try<T> {
+    static attempt<T>(fn: () => T, filter?: (err: Error) => boolean): Try<T> {
         try {
             var value = fn();
             return new Try<T>(value);
         } catch (err) {
-            return new Try<T>(null, err);
+            if (!filter || filter(err)) {
+                return new Try<T>(null, err);
+            } else {
+                throw err;
+            }
         }
-    }
-
-    static create<T>(fn: () => T, filter?: (err: Error) => boolean): Try<T> {
-        var t = Try.attempt<T>(fn);
-        if (!filter || filter(t.error())) {
-            return t;
-        }
-        throw t.error();
     }
 
     /**
