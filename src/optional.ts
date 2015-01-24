@@ -18,7 +18,7 @@ class Optional<T> {
      * @returns {T{]}
      */
     public static flatten<T>(optionals: Optional<T>[]): T[] {
-        return optionals.reduce((acc, elem) => {
+        return optionals.reduce((acc: T[], elem: Optional<T>) => {
             elem.forEach((value: T) => {
                 acc.push(value);
             });
