@@ -14,7 +14,7 @@ class Try<T> {
      */
     static all<T>(tries: Try<T>[]): Try<T[]> {
         return Try.attempt<T[]>(() => {
-            return tries.reduce((acc, elem) => {
+            return tries.reduce((acc: T[], elem: Try<T>) => {
                 acc.push(elem.getOrThrow());
                 return acc;
             }, []);
