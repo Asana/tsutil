@@ -5,6 +5,7 @@
   "main": "index.js",
   "files": [
     "*.js",
+    "!gulpfile.js",
     "*.d.ts"
   ],
   "scripts": {

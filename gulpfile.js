@@ -146,7 +146,8 @@ gulp.task('bundle', ['copy'], function() {
   _.dtsBundle.bundle({
     main: globs.bundle(),
     name: env.name(),
-    prefix: ''
+    prefix: '',
+    removeSource: true
   });
 });
 
