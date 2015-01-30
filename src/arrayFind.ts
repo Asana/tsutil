@@ -13,15 +13,15 @@ function arrayFind<T>(
     predicate: (x: T, index: number, list: T[]) => boolean,
     thisArg?: {}): T {
 
-  var length = list.length;
-  var value: T;
-  for (var i = 0; i < length; i++) {
-    value = list[i];
-    if (predicate.call(thisArg, value, i, list)) {
-       return value;
+    var length = list.length;
+    var value: T;
+    for (var i = 0; i < length; i++) {
+        value = list[i];
+        if (predicate.call(thisArg, value, i, list)) {
+            return value;
+        }
     }
-  }
-  return undefined;
+    return undefined;
 }
 
 export = arrayFind;
