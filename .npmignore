@@ -7,6 +7,6 @@ typings
 .gitignore
 .jshintrc
 .travis.yml
-gulpfile.js
+gulpfile.ts
 tsd.json
 tslint.json
