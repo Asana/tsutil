@@ -1,10 +1,10 @@
 before_install:
 - npm install -g tsd
 - tsd reinstall --overwrite
+- tsd rebundle
 cache:
   directories:
   - node_modules
-  - typings
 language: node_js
 node_js:
 - '0.10'
