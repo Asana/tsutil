@@ -1,5 +1,5 @@
 before_install:
-- npm install -g tsd
+- npm install -g tsd@0.6.0-beta.5
 - tsd reinstall --overwrite
 - tsd rebundle
 cache:
