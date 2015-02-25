@@ -108,7 +108,7 @@ describe("collections", () => {
         });
     });
 
-    describe("rduce", () => {
+    describe("reduce", () => {
         it("should return the reduced value", () => {
             var map = <tsutil.Map<number>>{ foo: 1, bar: 2 };
             assert.equal(collections.reduce(map, (current, value) => {
