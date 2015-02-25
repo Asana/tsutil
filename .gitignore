@@ -34,7 +34,6 @@ typings
 _build
 _cache
 doc
-tmp
 
 # IntelliJ
 .idea
