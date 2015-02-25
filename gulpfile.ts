@@ -125,7 +125,7 @@ gulp.task("pages", ["typedoc"], () => {
 /**
  * Compiles the TypeScript
  */
-gulp.task("scripts", (callback) => {
+gulp.task("scripts", ["clean"], (callback) => {
     var err: Error = null;
     var completed = 0;
     function drain(stream: NodeJS.ReadWriteStream): void {
