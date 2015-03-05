@@ -1,6 +1,6 @@
 {
   "name": "tsutil",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "TypeScript Utility Data Structures",
   "main": "index.js",
   "files": [
