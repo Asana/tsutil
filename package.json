@@ -55,5 +55,8 @@
     "sinon": "^1.12.2",
     "typescript-formatter": "^0.1.4",
     "typescript-require": "pspeter3/typescript-require"
+  },
+  "typescript": {
+    "definition": "tsutil.d.ts"
   }
 }
