@@ -78,7 +78,7 @@ describe("collections", () => {
             var map = <tsutil.Map<number>>{ foo: 0, bar: 1 };
             assert.deepEqual(collections.filter(map, (value) => {
                 return value === 1;
-            }), <tsutil.Map<number>>{bar: 1});
+            }), <tsutil.Map<number>>{ bar: 1 });
         });
     });
 
@@ -87,7 +87,7 @@ describe("collections", () => {
             var map = <tsutil.Map<number>>{ foo: 0, bar: 1 };
             assert.deepEqual(collections.map(map, (value) => {
                 return "v" + value;
-            }), <tsutil.Map<string>>{foo: "v0", bar: "v1"});
+            }), <tsutil.Map<string>>{ foo: "v0", bar: "v1" });
         });
     });
 

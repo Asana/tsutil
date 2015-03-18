@@ -5,7 +5,7 @@ class PerishableNode<T> implements Handle<T> {
     _callback: () => any;
     _prev: PerishableNode<T>;
     _next: PerishableNode<T>;
-    _is_released: boolean;
+    _isReleased: boolean;
 
     constructor(value: T, callback: () => any, prev: PerishableNode<T> = null) {
         this._value = value;
@@ -19,7 +19,7 @@ class PerishableNode<T> implements Handle<T> {
         if (this._hasNext()) {
             this._next._setPrev(this);
         }
-        this._is_released = false;
+        this._isReleased = false;
     }
 
     _setPrev(prev: PerishableNode<T>): void {
@@ -51,11 +51,11 @@ class PerishableNode<T> implements Handle<T> {
         if (this._hasNext()) {
             this._next._setPrev(this._prev);
         }
-        this._is_released = true;
+        this._isReleased = true;
     }
 
     isReleased(): boolean {
-      return this._is_released;
+        return this._isReleased;
     }
 }
 
