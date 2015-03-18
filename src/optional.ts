@@ -8,9 +8,7 @@ class Optional<T> {
      */
     static NONE = new Optional<any>(null);
 
-    private static _isEmpty(value: any): boolean {
-        return typeof value === "undefined" || value === null;
-    }
+    private _value: T;
 
     /**
      * Flattens an array of optionals by filtering out the empty optionals
@@ -26,7 +24,9 @@ class Optional<T> {
         }, []);
     }
 
-    private _value: T;
+    private static _isEmpty(value: any): boolean {
+        return typeof value === "undefined" || value === null;
+    }
 
     /**
      * Create an option from the value

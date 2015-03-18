@@ -51,13 +51,13 @@ describe("Perishable", () => {
     });
 
     describe("Handle", () => {
-      it("should update isReleased() when release() is called", () => {
-        var perishable = new tsutil.Perishable(VALUE, sinon.spy());
-        var handle = perishable.createHandle(null);
-        assert(!handle.isReleased());
-        handle.release();
-        assert(handle.isReleased());
-      });
+        it("should update isReleased() when release() is called", () => {
+            var perishable = new tsutil.Perishable(VALUE, sinon.spy());
+            var handle = perishable.createHandle(null);
+            assert(!handle.isReleased());
+            handle.release();
+            assert(handle.isReleased());
+        });
     });
 
     describe("createHandle", () => {

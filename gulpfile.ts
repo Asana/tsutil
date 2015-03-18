@@ -94,7 +94,7 @@ gulp.task("format", (callback) => {
         tsfmt.processFiles(files, {
             editorconfig: false,
             replace: true,
-            tsfmt: false,
+            tsfmt: true,
             tslint: true
         });
         return callback(null);
