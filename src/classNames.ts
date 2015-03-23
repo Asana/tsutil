@@ -11,22 +11,22 @@ function classNames(
     arg: ({ [key: string]: boolean } | string),
     ...extraClasses: string[]): string {
 
-  var className = "";
-  if (typeof arg === "object") {
-    for (var name in arg) {
-      if (arg.hasOwnProperty(name) && arg[name]) {
-        className += " " + name;
-      }
+    var className = "";
+    if (typeof arg === "object") {
+        for (var name in arg) {
+            if (arg.hasOwnProperty(name) && arg[name]) {
+                className += " " + name;
+            }
+        }
+    } else {
+        className = " " + arg;
     }
-  } else {
-    className = " " + arg;
-  }
 
-  var i: number;
-  for (i = 0; i < extraClasses.length; ++i) {
-    className += " " + extraClasses[i];
-  }
-  return className.substr(1);
+    var i: number;
+    for (i = 0; i < extraClasses.length; ++i) {
+        className += " " + extraClasses[i];
+    }
+    return className.substr(1);
 }
 
 export = classNames;
