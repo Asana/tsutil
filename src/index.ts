@@ -2,6 +2,7 @@
  * TsUtil Exports
  */
 export import arrayFind = require("./arrayFind");
+export import classNames = require("./classNames");
 export import collections = require("./collections");
 export import Handle = require("./handle");
 export import identity = require("./identity");
