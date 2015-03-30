@@ -66,6 +66,9 @@ class Perishable<T> {
     private _value: T;
     private _head: PerishableNode<T>;
 
+    private _isUnused: boolean;
+    private _isStale: boolean;
+
     /**
      * Create a new perishable
      * @param value The value to reference
@@ -73,7 +76,14 @@ class Perishable<T> {
      */
     constructor(value: T, onUnused: () => any) {
         this._value = value;
-        this._head = new PerishableNode<T>(value, onUnused);
+        this._head = new PerishableNode<T>(value, () => {
+          if (!this.isUnused()) {
+            this._isUnused = true;
+            onUnused();
+          }
+        });
+        this._isUnused = true;
+        this._isStale = false;
     }
 
     /**
@@ -89,7 +99,7 @@ class Perishable<T> {
      * @returns {boolean}
      */
     isStale(): boolean {
-        return this._head === null;
+        return this._isStale;
     }
 
     /**
@@ -97,7 +107,7 @@ class Perishable<T> {
      * @returns {boolean}
      */
     isUnused(): boolean {
-        return this.isStale() || !this._head._hasNext();
+        return this._isUnused;
     }
 
     /**
@@ -109,6 +119,7 @@ class Perishable<T> {
         if (this.isStale()) {
             throw new Error("Cannot createHandle when stale");
         }
+        this._isUnused = false;
         return new PerishableNode<T>(this._value, onStale, this._head);
     }
 
@@ -117,12 +128,10 @@ class Perishable<T> {
      */
     makeStale(): void {
         if (!this.isStale()) {
-            var node = this._head;
-            this._head = null;
-            var callbacks: Function[] = [];
-            while (node !== null) {
-                callbacks.push(node._callback);
-                node = node._next;
+            this._isStale = true;
+            var callbacks: Array<() => void> = [];
+            for (var node = this._head; node !== null; node = node._next) {
+              callbacks.push(node._callback);
             }
             for (var i = callbacks.length - 1; i >= 0; i--) {
                 callbacks[i]();
