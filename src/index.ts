@@ -12,3 +12,4 @@ export import Perishable = require("./perishable");
 export import Releasable = require("./releasable");
 export import Set = require("./set");
 export import Try = require("./try");
+export import Unit = require("./unit");
