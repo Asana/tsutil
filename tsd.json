@@ -52,6 +52,9 @@
     },
     "gulp-gh-pages/gulp-gh-pages.d.ts": {
       "commit": "84db5f1b5934ab9048185e784a34c545f1d705af"
+    },
+    "gulp-replace/gulp-replace.d.ts": {
+      "commit": "57340eca1e3aac68d59cc981b441da834ca38235"
     }
   }
 }
