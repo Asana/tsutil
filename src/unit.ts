@@ -6,7 +6,8 @@
  * null also fills this role, except you cannot refer to the Null type.
  */
 class Unit {
-    private static _instance: Unit;
+    // Public for tests.
+    static _instance: Unit;
 
     /**
      * instance returns the single Unit value.

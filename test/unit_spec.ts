@@ -4,6 +4,10 @@ import tsutil = require("../src/index");
 var assert = chai.assert;
 
 describe("Unit", () => {
+    beforeEach(() => {
+        delete tsutil.Unit._instance;
+    });
+
     describe("#constructor()", () => {
         it("should return the same instance repeatedly", () => {
             var unit0 = new tsutil.Unit();
