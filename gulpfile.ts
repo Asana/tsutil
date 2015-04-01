@@ -8,6 +8,7 @@ import gulp = require("gulp");
 import istanbul = require("gulp-istanbul");
 import mocha = require("gulp-mocha");
 import path = require("path");
+import replace = require("gulp-replace");
 import tsfmt = require("typescript-formatter");
 import tslint = require("gulp-tslint");
 import typedoc = require("gulp-typedoc");
@@ -161,6 +162,7 @@ gulp.task("scripts", ["clean"], (callback) => {
  */
 gulp.task("spec", ["scripts"], (callback) => {
     gulp.src(path.join(dirs.build, dirs.src, globs.js))
+        .pipe(replace(/^(var __extends =)/, "/* istanbul ignore next */\n$1"))
         .pipe(istanbul({
             includeUntested: true
         }))
