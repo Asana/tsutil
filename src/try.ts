@@ -96,7 +96,7 @@ class Try<E extends Error, T> extends Either<E, T> {
      * @returns {*}
      */
     filter(predicate: (value: T) => boolean): Try<Error, T> {
-        return this.transform((err: E) => {
+        return this.fold<Try<Error, T>>((err: E) => {
             return this;
         }, (value: T) => {
             if (predicate(value)) {
@@ -152,16 +152,6 @@ class Try<E extends Error, T> extends Either<E, T> {
         return this.value().map(() => this).getOrElse(() => {
             return other(this.error().getOrThrow());
         });
-    }
-
-    /**
-     * Transforms a try based on the success and failure conditions
-     * @param onSuccess The callback for when the try is successful
-     * @param onFailure The callback for when the try is failed
-     * @returns {Try<U>}
-     */
-    transform<F extends Error, U>(onFailure: (err: Error) => Try<F, U>, onSuccess: (value: T) => Try<F, U>): Try<F, U> {
-        return this.fold(onFailure, onSuccess);
     }
 
     /**
