@@ -39,14 +39,14 @@ describe("Try", () => {
             var t = tsutil.Try.attempt(() => {
                 throw ERR;
             });
-            assert.equal(t.error(), ERR);
+            assert.equal(t.errorOrNull(), ERR);
         });
 
         it("should handle a positive filter", () => {
             var t = tsutil.Try.attempt(() => {
                 throw ERR;
             }, () => { return true; });
-            assert.equal(t.error(), ERR);
+            assert.equal(t.errorOrNull(), ERR);
         });
 
         it("should handle a negative filter", () => {
@@ -75,7 +75,7 @@ describe("Try", () => {
     describe("#failure", () => {
         it("should return a failed Try", () => {
             var t = tsutil.Try.failure(ERR);
-            assert.equal(t.error(), ERR);
+            assert.equal(t.errorOrNull(), ERR);
         });
     });
 
@@ -87,14 +87,14 @@ describe("Try", () => {
 
         it("should handle an error", () => {
             var t = new tsutil.Try(ERR, null);
-            assert.equal(t.error(), ERR);
+            assert.equal(t.errorOrNull(), ERR);
         });
     });
 
     describe("error", () => {
         it("should return the error", () => {
             var t = tsutil.Try.failure(ERR);
-            assert.equal(t.error(), ERR);
+            assert.equal(t.errorOrNull(), ERR);
         });
     });
 
@@ -165,7 +165,7 @@ describe("Try", () => {
 
         it("should return a failed try if the mapper throws", () => {
             var t = tsutil.Try.success(VALUE).map(() => { throw ERR; });
-            assert.equal(t.error(), ERR);
+            assert.equal(t.errorOrNull(), ERR);
         });
 
         it("should not call the new value if the try is failed", () => {
@@ -247,7 +247,7 @@ describe("Try", () => {
             var spy = sinon.spy();
             var t = tsutil.Try.success(VALUE);
             var k = tsutil.Try.success(OTHER);
-            var u = t.transform(() => { return k; }, spy);
+            var u = t.transform(spy, () => { return k; });
             assert.equal(u, k);
             sinon.assert.notCalled(spy);
         });
@@ -256,7 +256,7 @@ describe("Try", () => {
             var spy = sinon.spy();
             var t = tsutil.Try.failure(ERR);
             var k = tsutil.Try.success(OTHER);
-            var u = t.transform(spy, () => { return k; });
+            var u = t.transform(() => { return k; }, spy);
             assert.equal(u, k);
             sinon.assert.notCalled(spy);
         });
