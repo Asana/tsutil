@@ -245,24 +245,4 @@ describe("Try", () => {
             assert.notEqual(k, t);
         });
     });
-
-    describe("transform", () => {
-        it("should call the success callback on success", () => {
-            var spy = sinon.spy();
-            var t = tsutil.Try.success(VALUE);
-            var k = tsutil.Try.success(OTHER);
-            var u = t.transform(spy, () => { return k; });
-            assert.equal(u, k);
-            sinon.assert.notCalled(spy);
-        });
-
-        it("should call the failure callback on failure", () => {
-            var spy = sinon.spy();
-            var t = tsutil.Try.failure(ERR);
-            var k = tsutil.Try.success(OTHER);
-            var u = t.transform(() => { return k; }, spy);
-            assert.equal(u, k);
-            sinon.assert.notCalled(spy);
-        });
-    });
 });
