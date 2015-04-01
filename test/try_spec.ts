@@ -81,18 +81,13 @@ describe("Try", () => {
 
     describe("constructor", () => {
         it("should handle a value", () => {
-            var t = new tsutil.Try(VALUE);
+            var t = new tsutil.Try(null, VALUE);
             assert.equal(t.getOrThrow(), VALUE);
         });
 
         it("should handle an error", () => {
-            var t = new tsutil.Try(null, ERR);
+            var t = new tsutil.Try(ERR, null);
             assert.equal(t.error(), ERR);
-        });
-
-        it("should override the value for an error", () => {
-            var t = new tsutil.Try(null, ERR);
-            assert.isTrue(t.isFailure());
         });
     });
 
