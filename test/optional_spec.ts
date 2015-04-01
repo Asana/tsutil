@@ -141,6 +141,19 @@ describe("Optional", () => {
         });
     });
 
+    describe("getOrNull", () => {
+        it("should return null for NONE", () => {
+            var value = tsutil.Optional.NONE.getOrNull();
+            assert.equal(value, null);
+        });
+
+        it("should return the value", () => {
+            var optional = new tsutil.Optional(VALUE);
+            var value = optional.getOrNull();
+            assert.equal(value, VALUE);
+        });
+    });
+
     describe("getOrThrow", () => {
         it("should throw for NONE", () => {
             assert.throws(() => {

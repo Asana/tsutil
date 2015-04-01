@@ -104,6 +104,16 @@ class Optional<T> {
     }
 
     /**
+     * Returns the value if it is defined, otherwise returns null.
+     * Use of this method is discouraged. Prefer using #forEach(), #flatMap(),
+     * #map(), #getOrElse(), etc.
+     * @returns {T}
+     */
+    getOrNull(): T {
+        return this._value;
+    }
+
+    /**
      * Retrieves the value and throws an error if the option is empty
      * @returns {T}
      */
