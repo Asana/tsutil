@@ -12,8 +12,8 @@ class Try<E extends Error, T> extends Either<E, T> {
      */
     static all<E extends Error, T>(tries: Try<E, T>[]): Try<E, T[]> {
         return Try.attempt<E, T[]>(() => {
-            return tries.reduce((acc: T[], elem: Try<E, T>) => {
-                acc.push(elem.getOrThrow());
+            return tries.reduce((acc: T[], t: Try<E, T>) => {
+                acc.push(t.valueOrThrow());
                 return acc;
             }, []);
         });
@@ -58,6 +58,10 @@ class Try<E extends Error, T> extends Either<E, T> {
         return new Try<E, T>(err, null);
     }
 
+    /**
+     * Return an Optional of the error, or NONE if it is not defined
+     * @returns {Optional<E>}
+     */
     error(): Optional<E> {
         return this.left();
     }
@@ -139,32 +143,6 @@ class Try<E extends Error, T> extends Either<E, T> {
         });
     }
 
-    get(): Optional<T> {
-        return this.value();
-    }
-
-    /**
-     * Access the value or throw the error
-     */
-    getOrThrow(): T {
-        if (this.isSuccess()) {
-            return this.value().getOrThrow();
-        } else {
-            throw this.error().getOrThrow();
-        }
-    }
-
-    /**
-     * Retrieves the value and falls back to another value in case of error
-     * @param other The fallback accessor
-     * @returns {*}
-     */
-    getOrElse<U extends T>(other: (err: E) => U): T {
-        return this.value().getOrElse(() => {
-            return other(this.error().getOrThrow());
-        });
-    }
-
     /**
      * Retrieves the value and falls back to another try
      * @param other The fallback try accessor
@@ -177,14 +155,6 @@ class Try<E extends Error, T> extends Either<E, T> {
     }
 
     /**
-     * Converts the try to an optional. Returns Optional.NONE if the try is not successful
-     * @returns {*}
-     */
-    toOptional(): Optional<T> {
-        return this.value();
-    }
-
-    /**
      * Transforms a try based on the success and failure conditions
      * @param onSuccess The callback for when the try is successful
      * @param onFailure The callback for when the try is failed
@@ -194,8 +164,34 @@ class Try<E extends Error, T> extends Either<E, T> {
         return this.fold(onFailure, onSuccess);
     }
 
+    /**
+     * Returns an Optional of the successful value, or NONE if it is not defined.
+     * @returns {Optional<T>}
+     */
     value(): Optional<T> {
         return this.right();
+    }
+
+    /**
+     * Access the value or throw the error
+     */
+    valueOrThrow(): T {
+        if (this.isSuccess()) {
+            return this.value().getOrThrow();
+        } else {
+            throw this.error().getOrThrow();
+        }
+    }
+
+    /**
+     * Retrieves the value and falls back to another value in case of error
+     * @param other The fallback accessor
+     * @returns {*}
+     */
+    valueOrElse<U extends T>(other: (err: E) => U): T {
+        return this.value().getOrElse(() => {
+            return other(this.error().getOrThrow());
+        });
     }
 }
 
