@@ -37,6 +37,8 @@ describe("Either", () => {
         });
     });
 
+    // The tslint rule `no-unused-expression` fires incorrectly for unassigned
+    // constructor calls. See https://github.com/palantir/tslint/issues/347.
     /* tslint:disable no-unused-expression */
     describe("#constructor()", () => {
         it("should throw an error when passed two null arguments", () => {
