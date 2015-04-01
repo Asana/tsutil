@@ -3,6 +3,7 @@
  */
 export import arrayFind = require("./arrayFind");
 export import collections = require("./collections");
+export import Either = require("./either");
 export import Handle = require("./handle");
 export import identity = require("./identity");
 export import Map = require("./map");
