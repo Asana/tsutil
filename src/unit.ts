@@ -8,10 +8,18 @@
 class Unit {
     private static _instance: Unit;
 
+    /**
+     * instance returns the single Unit value.
+     */
     public static instance(): Unit {
         return this._instance || new Unit();
     }
 
+    /**
+     * While Unit's constructor will still guarantee that it will not create
+     * duplicate values, you should prefer to call Unit.instance() instead,
+     * since its name captures the semantics of this behavior better.
+     */
     constructor() {
         if (typeof Unit._instance !== "undefined" && Unit._instance !== null) {
             return Unit._instance;
