@@ -105,8 +105,8 @@ class Optional<T> {
 
     /**
      * Returns the value if it is defined, otherwise returns null.
-     * Prefer to use #forEach(), #flatMap(), #map(), #getOrElse(), etc.
-     * when dealing with Optionals.
+     * Use of this method is discouraged. Prefer using #forEach(), #flatMap(),
+     * #map(), #getOrElse(), etc.
      * @returns {T}
      */
     getOrNull(): T {
