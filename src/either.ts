@@ -92,6 +92,8 @@ class Either<Left, Right> {
 
     /**
      * Returns left or null if it is not defined.
+     * Use of this method is discouraged. Prefer using use #left(), #fold(),
+     * etc. instead.
      * @returns {*}
      */
     leftOrNull(): Left {
@@ -108,6 +110,8 @@ class Either<Left, Right> {
 
     /**
      * Returns right or null if it is not defined.
+     * Use of this method is discouraged. Prefer using use #right(), #fold(),
+     * etc. instead.
      * @returns {*}
      */
     rightOrNull(): Right {
