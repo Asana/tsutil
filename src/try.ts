@@ -1,12 +1,10 @@
+import Either = require("./either");
 import Optional = require("./optional");
 
 /**
  * The Try class is used to represent an error xor a value
  */
-class Try<E extends Error, T> {
-    private _err: E;
-    private _value: T;
-
+class Try<E extends Error, T> extends Either<E, T> {
     /**
      * Attempts to flatten an array of tries
      * @param tries The list of tries to flatten
@@ -60,22 +58,16 @@ class Try<E extends Error, T> {
         return new Try<E, T>(err, null);
     }
 
-    /**
-     * Creates a new Try assuming success
-     * @param value The value for the Try
-     * @param err The optional error that will override the value
-     */
-    constructor(err: E, value: T) {
-        this._value = value;
-        this._err = err;
+    error(): Optional<E> {
+        return this.left();
     }
 
     /**
-     * The error of the try
+     * The error of the try or null if it does not exist
      * @returns {Error}
      */
-    error(): E {
-        return this._err;
+    errorOrNull(): E {
+        return this.leftOrNull();
     }
 
     /**
@@ -83,7 +75,7 @@ class Try<E extends Error, T> {
      * @returns {boolean}
      */
     isFailure(): boolean {
-        return this._err !== null;
+        return this.isLeft();
     }
 
     /**
@@ -91,7 +83,7 @@ class Try<E extends Error, T> {
      * @returns {boolean}
      */
     isSuccess(): boolean {
-        return !this.isFailure();
+        return this.isRight();
     }
 
     /**
@@ -100,10 +92,15 @@ class Try<E extends Error, T> {
      * @returns {*}
      */
     filter(predicate: (value: T) => boolean): Try<Error, T> {
-        if (this.isFailure() || predicate(this._value)) {
+        return this.transform((err: E) => {
             return this;
-        }
-        return Try.failure<Error, T>(new Error("Try#filter(): No such element"));
+        }, (value: T) => {
+            if (predicate(value)) {
+                return this;
+            } else {
+                return Try.failure<Error, T>(new Error("Try#filter(): No such element"));
+            }
+        });
     }
 
     /**
@@ -111,9 +108,7 @@ class Try<E extends Error, T> {
      * @param callback The callback for the value
      */
     forEach(callback: (value: T) => any): void {
-        if (this.isSuccess()) {
-            callback(this._value);
-        }
+        this.value().forEach(callback);
     }
 
     /**
@@ -122,12 +117,13 @@ class Try<E extends Error, T> {
      * @returns {Try<U>}
      */
     map<U>(mapper: (value: T) => U): Try<Error, U> {
-        if (this.isSuccess()) {
+        return this.value().map((value: T) => {
             return Try.attempt<Error, U>(() => {
-                return mapper(this._value);
+                return mapper(value);
             });
-        }
-        return (<Try<E, U>><{}>this);
+        }).getOrElse(() => {
+            return <Try<E, U>><{}>this;
+        });
     }
 
     /**
@@ -136,20 +132,26 @@ class Try<E extends Error, T> {
      * @returns {Try<U>}
      */
     flatMap<F extends E, U>(mapper: (value: T) => Try<F, U>): Try<E, U> {
-        if (this.isSuccess()) {
-            return mapper(this._value);
-        }
-        return (<Try<E, U>><{}>this);
+        return this.value().map((value: T): Try<E, U> => {
+            return mapper(value);
+        }).getOrElse(() => {
+            return <Try<E, U>><{}>this;
+        });
+    }
+
+    get(): Optional<T> {
+        return this.value();
     }
 
     /**
      * Access the value or throw the error
      */
     getOrThrow(): T {
-        if (this.isFailure()) {
-            throw this._err;
+        if (this.isSuccess()) {
+            return this.value().getOrThrow();
+        } else {
+            throw this.error().getOrThrow();
         }
-        return this._value;
     }
 
     /**
@@ -158,10 +160,9 @@ class Try<E extends Error, T> {
      * @returns {*}
      */
     getOrElse<U extends T>(other: (err: E) => U): T {
-        if (this.isSuccess()) {
-            return this._value;
-        }
-        return other(this._err);
+        return this.value().getOrElse(() => {
+            return other(this.error().getOrThrow());
+        });
     }
 
     /**
@@ -170,10 +171,9 @@ class Try<E extends Error, T> {
      * @returns {*}
      */
     orElse<U extends T>(other: (err: E) => Try<E, U>): Try<Error, T> {
-        if (this.isSuccess()) {
-            return this;
-        }
-        return other(this._err);
+        return this.value().map(() => this).getOrElse(() => {
+            return other(this.error().getOrThrow());
+        });
     }
 
     /**
@@ -181,10 +181,7 @@ class Try<E extends Error, T> {
      * @returns {*}
      */
     toOptional(): Optional<T> {
-        if (this.isSuccess()) {
-            return new Optional(this._value);
-        }
-        return Optional.NONE;
+        return this.value();
     }
 
     /**
@@ -193,11 +190,12 @@ class Try<E extends Error, T> {
      * @param onFailure The callback for when the try is failed
      * @returns {Try<U>}
      */
-    transform<F extends Error, U>(onSuccess: (value: T) => Try<F, U>, onFailure: (err: Error) => Try<F, U>): Try<F, U> {
-        if (this.isSuccess()) {
-            return onSuccess(this._value);
-        }
-        return onFailure(this._err);
+    transform<F extends Error, U>(onFailure: (err: Error) => Try<F, U>, onSuccess: (value: T) => Try<F, U>): Try<F, U> {
+        return this.fold(onFailure, onSuccess);
+    }
+
+    value(): Optional<T> {
+        return this.right();
     }
 }
 
