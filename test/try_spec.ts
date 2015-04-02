@@ -19,7 +19,7 @@ describe("Try", () => {
         it("should return all of the values if there is not an exception", () => {
             var t = tsutil.Try.success(VALUE);
             var k = tsutil.Try.success(OTHER);
-            assert.deepEqual(tsutil.Try.all([t, k]).getOrThrow(), [VALUE, OTHER]);
+            assert.deepEqual(tsutil.Try.all([t, k]).valueOrThrow(), [VALUE, OTHER]);
         });
 
         it("should throw if there is an exception", () => {
@@ -32,21 +32,21 @@ describe("Try", () => {
     describe("#attempt", () => {
         it("should return a value if successful", () => {
             var t = tsutil.Try.attempt(VALUE_ACCESSOR);
-            assert.equal(t.getOrThrow(), VALUE);
+            assert.equal(t.valueOrThrow(), VALUE);
         });
 
         it("should handle throwing an error", () => {
             var t = tsutil.Try.attempt(() => {
                 throw ERR;
             });
-            assert.equal(t.error(), ERR);
+            assert.equal(t.errorOrNull(), ERR);
         });
 
         it("should handle a positive filter", () => {
             var t = tsutil.Try.attempt(() => {
                 throw ERR;
             }, () => { return true; });
-            assert.equal(t.error(), ERR);
+            assert.equal(t.errorOrNull(), ERR);
         });
 
         it("should handle a negative filter", () => {
@@ -61,45 +61,44 @@ describe("Try", () => {
             var t = tsutil.Try.attempt(VALUE_ACCESSOR, () => {
                 return false;
             });
-            assert.equal(t.getOrThrow(), VALUE);
+            assert.equal(t.valueOrThrow(), VALUE);
         });
     });
 
     describe("#success", () => {
         it("should return a successful Try", () => {
             var t = tsutil.Try.success(VALUE);
-            assert.equal(t.getOrThrow(), VALUE);
+            assert.equal(t.valueOrThrow(), VALUE);
         });
     });
 
     describe("#failure", () => {
         it("should return a failed Try", () => {
             var t = tsutil.Try.failure(ERR);
-            assert.equal(t.error(), ERR);
+            assert.equal(t.errorOrNull(), ERR);
         });
     });
 
     describe("constructor", () => {
         it("should handle a value", () => {
-            var t = new tsutil.Try(VALUE);
-            assert.equal(t.getOrThrow(), VALUE);
+            var t = new tsutil.Try(null, VALUE);
+            assert.equal(t.valueOrThrow(), VALUE);
         });
 
         it("should handle an error", () => {
-            var t = new tsutil.Try(null, ERR);
-            assert.equal(t.error(), ERR);
-        });
-
-        it("should override the value for an error", () => {
-            var t = new tsutil.Try(null, ERR);
-            assert.isTrue(t.isFailure());
+            var t = new tsutil.Try(ERR, null);
+            assert.equal(t.errorOrNull(), ERR);
         });
     });
 
-    describe("error", () => {
+    /*describe("error", () => {
+
+    });*/
+
+    describe("errorOrNull", () => {
         it("should return the error", () => {
             var t = tsutil.Try.failure(ERR);
-            assert.equal(t.error(), ERR);
+            assert.equal(t.errorOrNull(), ERR);
         });
     });
 
@@ -165,12 +164,12 @@ describe("Try", () => {
     describe("map", () => {
         it("should return the new value", () => {
             var t = tsutil.Try.success(VALUE).map(OTHER_ACCESSOR);
-            assert.equal(t.getOrThrow(), OTHER);
+            assert.equal(t.valueOrThrow(), OTHER);
         });
 
         it("should return a failed try if the mapper throws", () => {
             var t = tsutil.Try.success(VALUE).map(() => { throw ERR; });
-            assert.equal(t.error(), ERR);
+            assert.equal(t.errorOrNull(), ERR);
         });
 
         it("should not call the new value if the try is failed", () => {
@@ -196,29 +195,39 @@ describe("Try", () => {
         });
     });
 
-    describe("getOrThrow", () => {
+    describe("value", () => {
+        it("should return an optional for success", () => {
+            assert.equal(tsutil.Try.success(VALUE).value().getOrThrow(), VALUE);
+        });
+
+        it("should return NONE for failure", () => {
+            assert.equal(tsutil.Try.failure(ERR).value(), tsutil.Optional.NONE);
+        });
+    });
+
+    describe("valueOrThrow", () => {
         it("should return the value for success", () => {
             var t = tsutil.Try.success(VALUE);
-            assert.equal(t.getOrThrow(), VALUE);
+            assert.equal(t.valueOrThrow(), VALUE);
         });
 
         it("should throw for failure", () => {
             assert.throws(() => {
-                tsutil.Try.failure(ERR).getOrThrow();
+                tsutil.Try.failure(ERR).valueOrThrow();
             });
         });
     });
 
-    describe("getOrElse", () => {
+    describe("valueOrElse", () => {
         it("should return value for success", () => {
             var t = tsutil.Try.success(VALUE);
-            var k = t.getOrElse(OTHER_ACCESSOR);
+            var k = t.valueOrElse(OTHER_ACCESSOR);
             assert.equal(k, VALUE);
         });
 
         it("should return other for failure", () => {
             var t = tsutil.Try.failure(ERR);
-            var k = t.getOrElse(OTHER_ACCESSOR);
+            var k = t.valueOrElse(OTHER_ACCESSOR);
             assert.equal(k, OTHER);
         });
     });
@@ -234,36 +243,6 @@ describe("Try", () => {
             var t = tsutil.Try.failure(ERR);
             var k = t.orElse(() => { return tsutil.Try.success(OTHER); });
             assert.notEqual(k, t);
-        });
-    });
-
-    describe("toOptional", () => {
-        it("should return an optional for success", () => {
-            assert.equal(tsutil.Try.success(VALUE).toOptional().getOrThrow(), VALUE);
-        });
-
-        it("should return NONE for failure", () => {
-            assert.equal(tsutil.Try.failure(ERR).toOptional(), tsutil.Optional.NONE);
-        });
-    });
-
-    describe("transform", () => {
-        it("should call the success callback on success", () => {
-            var spy = sinon.spy();
-            var t = tsutil.Try.success(VALUE);
-            var k = tsutil.Try.success(OTHER);
-            var u = t.transform(() => { return k; }, spy);
-            assert.equal(u, k);
-            sinon.assert.notCalled(spy);
-        });
-
-        it("should call the failure callback on failure", () => {
-            var spy = sinon.spy();
-            var t = tsutil.Try.failure(ERR);
-            var k = tsutil.Try.success(OTHER);
-            var u = t.transform(spy, () => { return k; });
-            assert.equal(u, k);
-            sinon.assert.notCalled(spy);
         });
     });
 });
