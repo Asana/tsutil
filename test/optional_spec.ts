@@ -200,4 +200,17 @@ describe("Optional", () => {
             sinon.assert.notCalled(spy);
         });
     });
+
+    describe("toArray", () => {
+        it("should return an empty array for NONE", () => {
+            var array = tsutil.Optional.NONE.toArray();
+            assert.deepEqual(array, []);
+        });
+
+        it("should return an array containing the value", () => {
+            var optional = new tsutil.Optional(VALUE);
+            var array = optional.toArray();
+            assert.deepEqual(array, [VALUE]);
+        });
+    });
 });

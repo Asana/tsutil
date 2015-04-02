@@ -147,6 +147,19 @@ class Optional<T> {
         }
         return other();
     }
+
+    /**
+     * Returns a new array containing just the value if it is defined,
+     * or an empty array if the value is not defined.
+     * @returns {*}
+     */
+    toArray(): Array<T> {
+        if (this.isNonEmpty()) {
+            return [this._value];
+        } else {
+            return [];
+        }
+    }
 }
 
 export = Optional;
