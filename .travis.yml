@@ -7,7 +7,7 @@ cache:
   - node_modules
 language: node_js
 node_js:
-- '0.10'
+- '0.12'
 sudo: false
 before_deploy:
 - npm run bundle
