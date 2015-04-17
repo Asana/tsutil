@@ -81,12 +81,12 @@ describe("Try", () => {
 
     describe("constructor", () => {
         it("should handle a value", () => {
-            var t = new tsutil.Try(null, VALUE);
+            var t = new tsutil.Try(undefined, VALUE);
             assert.equal(t.valueOrThrow(), VALUE);
         });
 
         it("should handle an error", () => {
-            var t = new tsutil.Try(ERR, null);
+            var t = new tsutil.Try(ERR, undefined);
             assert.equal(t.errorOrNull(), ERR);
         });
     });

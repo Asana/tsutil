@@ -30,10 +30,10 @@ class Try<E extends Error, T> extends Either<E, T> {
     static attempt<E extends Error, T>(fn: () => T, filter?: (err: E) => boolean): Try<E, T> {
         try {
             var value = fn();
-            return new Try<E, T>(null, value);
+            return new Try<E, T>(undefined, value);
         } catch (err) {
             if (!filter || filter(err)) {
-                return new Try<E, T>(err, null);
+                return new Try<E, T>(err, undefined);
             } else {
                 throw err;
             }
@@ -46,7 +46,7 @@ class Try<E extends Error, T> extends Either<E, T> {
      * @returns {Try<T>}
      */
     static success<E extends Error, T>(value: T): Try<E, T> {
-        return new Try<E, T>(null, value);
+        return new Try<E, T>(undefined, value);
     }
 
     /**
@@ -55,7 +55,7 @@ class Try<E extends Error, T> extends Either<E, T> {
      * @returns {Try<T>}
      */
     static failure<E extends Error, T>(err: E): Try<E, T> {
-        return new Try<E, T>(err, null);
+        return new Try<E, T>(err, undefined);
     }
 
     /**
