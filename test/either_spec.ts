@@ -16,9 +16,9 @@ describe("Either", () => {
                 assert.equal(left.leftOrNull(), LEFT_VALUE);
             });
 
-            it("should throw an error when passed null", () => {
+            it("should throw an error when passed undefined", () => {
                 assert.throws(() => {
-                    Either.left(null);
+                    Either.left(undefined);
                 });
             });
         });
@@ -29,9 +29,9 @@ describe("Either", () => {
                 assert.equal(right.rightOrNull(), RIGHT_VALUE);
             });
 
-            it("should throw an error when passed null", () => {
+            it("should throw an error when passed undefined", () => {
                 assert.throws(() => {
-                    Either.right(null);
+                    Either.right(undefined);
                 });
             });
         });
@@ -41,9 +41,9 @@ describe("Either", () => {
     // constructor calls. See https://github.com/palantir/tslint/issues/347.
     /* tslint:disable no-unused-expression */
     describe("#constructor()", () => {
-        it("should throw an error when passed two null arguments", () => {
+        it("should throw an error when passed two undefined arguments", () => {
             assert.throws(() => {
-                new Either(null, null);
+                new Either(undefined, undefined);
             });
         });
 
@@ -54,12 +54,12 @@ describe("Either", () => {
         });
 
         it("should return an Either with the provided left value", () => {
-            var left = new Either(LEFT_VALUE, null);
+            var left = new Either(LEFT_VALUE, undefined);
             assert.equal(left.leftOrNull(), LEFT_VALUE);
         });
 
         it("should return an Either with the provided right value", () => {
-            var right = new Either(null, RIGHT_VALUE);
+            var right = new Either(undefined, RIGHT_VALUE);
             assert.equal(right.rightOrNull(), RIGHT_VALUE);
         });
     });

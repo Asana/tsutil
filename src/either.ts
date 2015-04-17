@@ -5,8 +5,8 @@ import Optional = require("./optional");
  * To represent a computation that is an Error/Result, use Try.
  */
 class Either<Left, Right> {
-    private _left: Left = null;
-    private _right: Right = null;
+    private _left: Left = undefined;
+    private _right: Right = undefined;
 
     /**
      * Returns an Either with the provided left value.
@@ -14,7 +14,7 @@ class Either<Left, Right> {
      * @returns {*}
      */
     static left<Left, Right>(left: Left): Either<Left, Right> {
-        return new Either(left, null);
+        return new Either(left, undefined);
     }
 
     /**
@@ -23,7 +23,7 @@ class Either<Left, Right> {
      * @returns {*}
      */
     static right<Left, Right>(right: Right): Either<Left, Right> {
-        return new Either(null, right);
+        return new Either(undefined, right);
     }
 
     /**
@@ -35,8 +35,8 @@ class Either<Left, Right> {
      * @param right
      */
     constructor(left: Left, right: Right) {
-        var leftDefined = typeof left !== "undefined" && left !== null;
-        var rightDefined = typeof right !== "undefined" && right !== null;
+        var leftDefined = typeof left !== "undefined";
+        var rightDefined = typeof right !== "undefined";
 
         if (!leftDefined && !rightDefined) {
             throw new Error("Either#constructor(): Left or right must be defined");
@@ -71,7 +71,7 @@ class Either<Left, Right> {
      * @returns {*}
      */
     isLeft(): boolean {
-        return this._left !== null;
+        return typeof this._left !== "undefined";
     }
 
     /**
