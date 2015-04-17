@@ -16,6 +16,11 @@ class Unit {
         return this._instance || new Unit();
     }
 
+    /* tslint:disable no-unused-variable */
+    // For nominal type safety.
+    private _isUnit: Unit;
+    /* tslint:enable no-unused-variable */
+
     /**
      * While Unit's constructor will still guarantee that it will not create
      * duplicate values, you should prefer to call Unit.instance() instead,
