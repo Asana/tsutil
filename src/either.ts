@@ -26,6 +26,10 @@ class Either<Left, Right> {
         return new Either(undefined, right);
     }
 
+    private static _isDefined(value: any): boolean {
+        return typeof value !== "undefined";
+    }
+
     /**
      * You must provide left xor right.
      *
@@ -35,8 +39,8 @@ class Either<Left, Right> {
      * @param right
      */
     constructor(left: Left, right: Right) {
-        var leftDefined = typeof left !== "undefined";
-        var rightDefined = typeof right !== "undefined";
+        var leftDefined = Either._isDefined(left);
+        var rightDefined = Either._isDefined(right);
 
         if (!leftDefined && !rightDefined) {
             throw new Error("Either#constructor(): Left or right must be defined");
@@ -71,7 +75,7 @@ class Either<Left, Right> {
      * @returns {*}
      */
     isLeft(): boolean {
-        return typeof this._left !== "undefined";
+        return Either._isDefined(this._left);
     }
 
     /**
@@ -79,7 +83,7 @@ class Either<Left, Right> {
      * @returns {*}
      */
     isRight(): boolean {
-        return !this.isLeft();
+        return Either._isDefined(this._right);
     }
 
     /**
@@ -97,7 +101,11 @@ class Either<Left, Right> {
      * @returns {*}
      */
     leftOrNull(): Left {
-        return this._left;
+        if (this.isLeft()) {
+            return this._left;
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -115,7 +123,11 @@ class Either<Left, Right> {
      * @returns {*}
      */
     rightOrNull(): Right {
-        return this._right;
+        if (this.isRight()) {
+            return this._right;
+        } else {
+            return null;
+        }
     }
 
     /**

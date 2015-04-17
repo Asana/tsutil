@@ -58,6 +58,13 @@ class Try<E extends Error, T> extends Either<E, T> {
         return new Try<E, T>(err, undefined);
     }
 
+    constructor(error: E, value: T) {
+        super(error, value);
+        if (this.isFailure() && this.errorOrNull() === null) {
+            throw new Error("Try#constructor(): Provided a null error");
+        }
+    }
+
     /**
      * Return an Optional of the error, or NONE if it is not defined
      * @returns {Optional<E>}
@@ -112,7 +119,9 @@ class Try<E extends Error, T> extends Either<E, T> {
      * @param callback The callback for the value
      */
     forEach(callback: (value: T) => any): void {
-        this.value().forEach(callback);
+        if (this.isSuccess()) {
+            callback(this.valueOrNull());
+        }
     }
 
     /**
@@ -121,13 +130,13 @@ class Try<E extends Error, T> extends Either<E, T> {
      * @returns {Try<U>}
      */
     map<U>(mapper: (value: T) => U): Try<Error, U> {
-        return this.value().map((value: T) => {
+        if (this.isSuccess()) {
             return Try.attempt<Error, U>(() => {
-                return mapper(value);
+                return mapper(this.valueOrNull());
             });
-        }).getOrElse(() => {
+        } else {
             return <Try<E, U>><{}>this;
-        });
+        }
     }
 
     /**
@@ -136,11 +145,11 @@ class Try<E extends Error, T> extends Either<E, T> {
      * @returns {Try<U>}
      */
     flatMap<F extends E, U>(mapper: (value: T) => Try<F, U>): Try<E, U> {
-        return this.value().map((value: T): Try<E, U> => {
-            return mapper(value);
-        }).getOrElse(() => {
+        if (this.isSuccess()) {
+            return mapper(this.valueOrNull());
+        } else {
             return <Try<E, U>><{}>this;
-        });
+        }
     }
 
     /**
@@ -149,9 +158,11 @@ class Try<E extends Error, T> extends Either<E, T> {
      * @returns {*}
      */
     orElse<U extends T>(other: (err: E) => Try<E, U>): Try<Error, T> {
-        return this.value().map(() => this).getOrElse(() => {
-            return other(this.error().getOrThrow());
-        });
+        if (this.isSuccess()) {
+            return this;
+        } else {
+            return other(this.errorOrNull());
+        }
     }
 
     /**
@@ -163,13 +174,21 @@ class Try<E extends Error, T> extends Either<E, T> {
     }
 
     /**
+     * Prefer using Try#value().
+     * @returns {T}
+     */
+    valueOrNull(): T {
+        return this.rightOrNull();
+    }
+
+    /**
      * Access the value or throw the error
      */
     valueOrThrow(): T {
         if (this.isSuccess()) {
-            return this.value().getOrThrow();
+            return this.valueOrNull();
         } else {
-            throw this.error().getOrThrow();
+            throw this.errorOrNull();
         }
     }
 
@@ -179,9 +198,11 @@ class Try<E extends Error, T> extends Either<E, T> {
      * @returns {*}
      */
     valueOrElse<U extends T>(other: (err: E) => U): T {
-        return this.value().getOrElse(() => {
-            return other(this.error().getOrThrow());
-        });
+        if (this.isSuccess()) {
+            return this.valueOrNull();
+        } else {
+            return other(this.errorOrNull());
+        }
     }
 }
 

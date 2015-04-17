@@ -77,9 +77,16 @@ describe("Try", () => {
             var t = tsutil.Try.failure(ERR);
             assert.equal(t.errorOrNull(), ERR);
         });
+
+        it("should throw an error if provided with a null error", () => {
+            assert.throws(() => {
+                tsutil.Try.failure(null);
+            });
+        });
     });
 
     describe("constructor", () => {
+        /* tslint:disable no-unused-expression */
         it("should handle a value", () => {
             var t = new tsutil.Try(undefined, VALUE);
             assert.equal(t.valueOrThrow(), VALUE);
@@ -89,14 +96,32 @@ describe("Try", () => {
             var t = new tsutil.Try(ERR, undefined);
             assert.equal(t.errorOrNull(), ERR);
         });
+
+        it("should throw an error if provided with a null error", () => {
+            assert.throws(() => {
+                new tsutil.Try(null, undefined);
+            });
+        });
+        /* tslint:enable no-unused-expression */
     });
 
-    /*describe("error", () => {
+    describe("error", () => {
+        it("should return NONE for a success", () => {
+            assert.equal(tsutil.Try.success(VALUE).error(), tsutil.Optional.NONE);
+        });
 
-    });*/
+        it("should return an Optional of the error for a failure", () => {
+            assert.equal(tsutil.Try.failure(ERR).error().getOrThrow(), ERR);
+        });
+    });
 
     describe("errorOrNull", () => {
-        it("should return the error", () => {
+        it("should return null for a success", () => {
+            var t = tsutil.Try.success(VALUE);
+            assert.isNull(t.errorOrNull());
+        });
+
+        it("should return the error for a failure", () => {
             var t = tsutil.Try.failure(ERR);
             assert.equal(t.errorOrNull(), ERR);
         });
@@ -159,6 +184,13 @@ describe("Try", () => {
             t.forEach(spy);
             sinon.assert.notCalled(spy);
         });
+
+        it("should call the callback for a null value", () => {
+            var spy = sinon.spy();
+            var t = tsutil.Try.success(null);
+            t.forEach(spy);
+            sinon.assert.calledWithExactly(spy, null);
+        });
     });
 
     describe("map", () => {
@@ -179,6 +211,13 @@ describe("Try", () => {
             assert.equal(k, t);
             sinon.assert.notCalled(spy);
         });
+
+        it("should call the mapper for a null value", () => {
+            var spy = sinon.spy();
+            var t = tsutil.Try.success(null);
+            t.map(spy);
+            sinon.assert.calledWithExactly(spy, null);
+        });
     });
 
     describe("flatMap", () => {
@@ -193,6 +232,13 @@ describe("Try", () => {
             var k = t.flatMap(() => { return tsutil.Try.success(VALUE); });
             assert.equal(k, t);
         });
+
+        it("should call the mapper for a null value", () => {
+            var spy = sinon.spy();
+            var t = tsutil.Try.success(null);
+            t.flatMap(spy);
+            sinon.assert.calledWithExactly(spy, null);
+        });
     });
 
     describe("value", () => {
@@ -202,6 +248,27 @@ describe("Try", () => {
 
         it("should return NONE for failure", () => {
             assert.equal(tsutil.Try.failure(ERR).value(), tsutil.Optional.NONE);
+        });
+
+        it("should return NONE for a null value", () => {
+            assert.equal(tsutil.Try.success(null).value(), tsutil.Optional.NONE);
+        });
+    });
+
+    describe("valueOrNull", () => {
+        it("should return the value for success", () => {
+            var t = tsutil.Try.success(VALUE);
+            assert.equal(t.valueOrNull(), VALUE);
+        });
+
+        it("should return null for failure", () => {
+            var t = tsutil.Try.failure(ERR);
+            assert.isNull(t.valueOrNull());
+        });
+
+        it("should return null for a null value", () => {
+            var t = tsutil.Try.success(null);
+            assert.isNull(t.valueOrNull());
         });
     });
 
@@ -215,6 +282,11 @@ describe("Try", () => {
             assert.throws(() => {
                 tsutil.Try.failure(ERR).valueOrThrow();
             });
+        });
+
+        it("should return null for a null value", () => {
+            var t = tsutil.Try.success(null);
+            assert.isNull(t.valueOrThrow());
         });
     });
 
@@ -230,6 +302,13 @@ describe("Try", () => {
             var k = t.valueOrElse(OTHER_ACCESSOR);
             assert.equal(k, OTHER);
         });
+
+        it("should return null for a null value", () => {
+            var spy = sinon.spy();
+            var t = tsutil.Try.success(null);
+            assert.isNull(t.valueOrElse(spy));
+            sinon.assert.notCalled(spy);
+        });
     });
 
     describe("orElse", () => {
@@ -243,6 +322,14 @@ describe("Try", () => {
             var t = tsutil.Try.failure(ERR);
             var k = t.orElse(() => { return tsutil.Try.success(OTHER); });
             assert.notEqual(k, t);
+        });
+
+        it("should return this for a null value", () => {
+            var spy = sinon.spy();
+            var t = tsutil.Try.success(null);
+            var u = t.orElse(spy);
+            sinon.assert.notCalled(spy);
+            assert.equal(t, u);
         });
     });
 });

@@ -137,7 +137,7 @@ describe("Either", () => {
         });
 
         it("should return null if the left value is not defined", () => {
-            assert.equal(right.leftOrNull(), null);
+            assert.isNull(right.leftOrNull());
         });
     });
 
@@ -157,7 +157,7 @@ describe("Either", () => {
         });
 
         it("should return null if the right value is not defined", () => {
-            assert.equal(left.rightOrNull(), null);
+            assert.isNull(left.rightOrNull());
         });
     });
 
