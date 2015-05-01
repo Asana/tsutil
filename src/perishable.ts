@@ -66,24 +66,20 @@ class Perishable<T> {
     private _value: T;
     private _head: PerishableNode<T>;
 
-    private _isUnused: boolean;
     private _isStale: boolean;
+    private _onStale: () => any;
 
     /**
      * Create a new perishable
      * @param value The value to reference
-     * @param onUnused The callback for when the reference become unused
+     * @param onUnused Called when the reference becomes unused. Can be called more than once.
+     * @param onStale Called when the reference becomes stale. Only called once.
      */
-    constructor(value: T, onUnused: () => any) {
+    constructor(value: T, onUnused: () => any, onStale: () => any) {
         this._value = value;
-        this._head = new PerishableNode<T>(value, () => {
-          if (!this.isUnused()) {
-            this._isUnused = true;
-            onUnused();
-          }
-        });
-        this._isUnused = true;
+        this._head = new PerishableNode<T>(value, onUnused);
         this._isStale = false;
+        this._onStale = onStale;
     }
 
     /**
@@ -107,7 +103,7 @@ class Perishable<T> {
      * @returns {boolean}
      */
     isUnused(): boolean {
-        return this._isUnused;
+        return !this._head._hasNext();
     }
 
     /**
@@ -119,7 +115,6 @@ class Perishable<T> {
         if (this.isStale()) {
             throw new Error("Cannot createHandle when stale");
         }
-        this._isUnused = false;
         return new PerishableNode<T>(this._value, onStale, this._head);
     }
 
@@ -130,12 +125,13 @@ class Perishable<T> {
         if (!this.isStale()) {
             this._isStale = true;
             var callbacks: Array<() => void> = [];
-            for (var node = this._head; node !== null; node = node._next) {
-              callbacks.push(node._callback);
+            for (var node = this._head._next; node !== null; node = node._next) {
+                callbacks.push(node._callback);
             }
             for (var i = callbacks.length - 1; i >= 0; i--) {
                 callbacks[i]();
             }
+            this._onStale();
         }
     }
 }

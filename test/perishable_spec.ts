@@ -9,20 +9,20 @@ describe("Perishable", () => {
 
     describe("constructor", () => {
         it("should create a perishable", () => {
-            var perishable = new tsutil.Perishable(VALUE, sinon.spy());
+            var perishable = new tsutil.Perishable(VALUE, sinon.spy(), sinon.spy());
             assert.instanceOf(perishable, tsutil.Perishable);
         });
 
         it("should call onUnused", () => {
-            var spy = sinon.spy();
-            var perishable = new tsutil.Perishable(VALUE, spy);
+            var onUnused = sinon.spy();
+            var perishable = new tsutil.Perishable(VALUE, onUnused, sinon.spy());
             perishable.createHandle(null).release();
-            sinon.assert.calledOnce(spy);
+            sinon.assert.calledOnce(onUnused);
         });
 
         it("should call onUnused every time", () => {
             var spy = sinon.spy();
-            var perishable = new tsutil.Perishable(VALUE, spy);
+            var perishable = new tsutil.Perishable(VALUE, spy, sinon.spy());
             perishable.createHandle(null).release();
             perishable.createHandle(null).release();
             sinon.assert.calledTwice(spy);
@@ -31,28 +31,28 @@ describe("Perishable", () => {
 
     describe("value", () => {
         it("should return the value", () => {
-            var perishable = new tsutil.Perishable(VALUE, sinon.spy());
+            var perishable = new tsutil.Perishable(VALUE, sinon.spy(), sinon.spy());
             assert.equal(perishable.value(), VALUE);
         });
     });
 
     describe("isStale", () => {
         it("should return false by default", () => {
-            var perishable = new tsutil.Perishable(VALUE, sinon.spy());
+            var perishable = new tsutil.Perishable(VALUE, sinon.spy(), sinon.spy());
             assert.isFalse(perishable.isStale());
         });
     });
 
     describe("isUnused", () => {
         it("should be unused by default", () => {
-            var perishable = new tsutil.Perishable(VALUE, sinon.spy());
+            var perishable = new tsutil.Perishable(VALUE, sinon.spy(), sinon.spy());
             assert.isTrue(perishable.isUnused());
         });
     });
 
     describe("Handle", () => {
         it("should update isReleased() when release() is called", () => {
-            var perishable = new tsutil.Perishable(VALUE, sinon.spy());
+            var perishable = new tsutil.Perishable(VALUE, sinon.spy(), sinon.spy());
             var handle = perishable.createHandle(null);
             assert(!handle.isReleased());
             handle.release();
@@ -62,7 +62,7 @@ describe("Perishable", () => {
 
     describe("createHandle", () => {
         it("should create a handle", () => {
-            var perishable = new tsutil.Perishable(VALUE, sinon.spy());
+            var perishable = new tsutil.Perishable(VALUE, sinon.spy(), sinon.spy());
             var spy = sinon.spy();
             var handle = perishable.createHandle(spy);
             assert.equal(handle.value(), VALUE);
@@ -70,7 +70,7 @@ describe("Perishable", () => {
         });
 
         it("should throw if stale", () => {
-            var perishable = new tsutil.Perishable(VALUE, sinon.spy());
+            var perishable = new tsutil.Perishable(VALUE, sinon.spy(), sinon.spy());
             perishable.makeStale();
             assert.throws(() => {
                 perishable.createHandle(null);
@@ -80,13 +80,13 @@ describe("Perishable", () => {
 
     describe("makeStale", () => {
         it("should make the projection stale", () => {
-            var perishable = new tsutil.Perishable(VALUE, sinon.spy());
+            var perishable = new tsutil.Perishable(VALUE, sinon.spy(), sinon.spy());
             perishable.makeStale();
             assert.isTrue(perishable.isStale());
         });
 
         it("should notify a handle", () => {
-            var perishable = new tsutil.Perishable(VALUE, sinon.spy());
+            var perishable = new tsutil.Perishable(VALUE, sinon.spy(), sinon.spy());
             var spy = sinon.spy();
             perishable.createHandle(spy);
             perishable.makeStale();
@@ -94,7 +94,7 @@ describe("Perishable", () => {
         });
 
         it("should notify multiple handles", () => {
-            var perishable = new tsutil.Perishable(VALUE, sinon.spy());
+            var perishable = new tsutil.Perishable(VALUE, sinon.spy(), sinon.spy());
             var first = sinon.spy();
             var second = sinon.spy();
             perishable.createHandle(first);
@@ -105,7 +105,7 @@ describe("Perishable", () => {
         });
 
         it("should not notify a handle when stale", () => {
-            var perishable = new tsutil.Perishable(VALUE, sinon.spy());
+            var perishable = new tsutil.Perishable(VALUE, sinon.spy(), sinon.spy());
             var spy = sinon.spy();
             perishable.createHandle(spy);
             perishable.makeStale();
@@ -114,7 +114,7 @@ describe("Perishable", () => {
         });
 
         it("should not notify a released handle", () => {
-            var perishable = new tsutil.Perishable(VALUE, sinon.spy());
+            var perishable = new tsutil.Perishable(VALUE, sinon.spy(), sinon.spy());
             var spy = sinon.spy();
             var handle = perishable.createHandle(spy);
             handle.release();
@@ -123,7 +123,7 @@ describe("Perishable", () => {
         });
 
         it("should not notify a released handle at the beginning of the list", () => {
-            var perishable = new tsutil.Perishable(VALUE, sinon.spy());
+            var perishable = new tsutil.Perishable(VALUE, sinon.spy(), sinon.spy());
             var first = sinon.spy();
             var second = sinon.spy();
             perishable.createHandle(first).release();
@@ -134,7 +134,7 @@ describe("Perishable", () => {
         });
 
         it("should not notify a released handle at the end of the list", () => {
-            var perishable = new tsutil.Perishable(VALUE, sinon.spy());
+            var perishable = new tsutil.Perishable(VALUE, sinon.spy(), sinon.spy());
             var first = sinon.spy();
             var second = sinon.spy();
             perishable.createHandle(first);
@@ -145,7 +145,7 @@ describe("Perishable", () => {
         });
 
         it("should not notify a released handle in a list", () => {
-            var perishable = new tsutil.Perishable(VALUE, sinon.spy());
+            var perishable = new tsutil.Perishable(VALUE, sinon.spy(), sinon.spy());
             var first = sinon.spy();
             var second = sinon.spy();
             var third = sinon.spy();
@@ -159,16 +159,16 @@ describe("Perishable", () => {
             sinon.assert.calledOnce(third);
         });
 
-        it("should handle isUnused after correctly", () => {
-            var perishable = new tsutil.Perishable(VALUE, sinon.spy());
+        it("should still be used after makeStale", () => {
+            var perishable = new tsutil.Perishable(VALUE, sinon.spy(), sinon.spy());
             perishable.createHandle(sinon.spy());
             perishable.createHandle(sinon.spy());
             perishable.makeStale();
-            assert.isTrue(perishable.isUnused());
+            assert.isFalse(perishable.isUnused());
         });
 
         it("should handle first release after correctly", () => {
-            var perishable = new tsutil.Perishable(VALUE, sinon.spy());
+            var perishable = new tsutil.Perishable(VALUE, sinon.spy(), sinon.spy());
             var first = perishable.createHandle(sinon.spy());
             perishable.createHandle(sinon.spy());
             perishable.makeStale();
@@ -176,7 +176,7 @@ describe("Perishable", () => {
         });
 
         it("should handle second release after correctly", () => {
-            var perishable = new tsutil.Perishable(VALUE, sinon.spy());
+            var perishable = new tsutil.Perishable(VALUE, sinon.spy(), sinon.spy());
             perishable.createHandle(sinon.spy());
             var second = perishable.createHandle(sinon.spy());
             perishable.makeStale();
@@ -184,7 +184,7 @@ describe("Perishable", () => {
         });
 
         it("should be stale once make stale is called", () => {
-            var perishable = new tsutil.Perishable(VALUE, sinon.spy());
+            var perishable = new tsutil.Perishable(VALUE, sinon.spy(), sinon.spy());
             perishable.createHandle(() => { assert.isTrue(perishable.isStale()); });
             perishable.createHandle(() => { assert.isTrue(perishable.isStale()); });
             perishable.makeStale();
@@ -192,25 +192,24 @@ describe("Perishable", () => {
 
         it("should not call onUnused if it is already unused", () => {
             var spy = sinon.spy();
-            var perishable = new tsutil.Perishable(VALUE, spy);
+            var perishable = new tsutil.Perishable(VALUE, spy, sinon.spy());
             perishable.makeStale();
             sinon.assert.notCalled(spy);
         });
 
-        it("should call onUnused when becoming stale", () => {
+        it("should call onStale when becoming stale", () => {
             var onUnused = sinon.spy();
             var onStale = sinon.spy();
-            var perishable = new tsutil.Perishable(VALUE, onUnused);
-            perishable.createHandle(onStale);
-
+            var perishable = new tsutil.Perishable(VALUE, onUnused, onStale);
             perishable.makeStale();
-            sinon.assert.calledOnce(onUnused);
+            sinon.assert.notCalled(onUnused);
+            sinon.assert.calledOnce(onStale);
         });
 
         it("should call onUnused once during a makeStale", () => {
             // Iff the makeStale() makes the perishable unused.
             var onUnused = sinon.spy();
-            var perishable = new tsutil.Perishable(VALUE, onUnused);
+            var perishable = new tsutil.Perishable(VALUE, onUnused, sinon.spy());
 
             var toRelease = perishable.createHandle(() => {
                 toRelease.release();
@@ -222,14 +221,14 @@ describe("Perishable", () => {
         it("should handle another release call during makeStale", () => {
             var onUnused = sinon.spy();
             var spy = sinon.spy();
-            var perishable = new tsutil.Perishable(VALUE, onUnused);
+            var perishable = new tsutil.Perishable(VALUE, onUnused, sinon.spy());
             var toRelease: tsutil.Releasable;
             perishable.createHandle(() => {
                 toRelease.release();
             });
             toRelease = perishable.createHandle(spy);
             perishable.makeStale();
-            sinon.assert.calledOnce(onUnused);
+            sinon.assert.notCalled(onUnused);
             sinon.assert.calledOnce(spy);
         });
     });
