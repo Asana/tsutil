@@ -58,6 +58,15 @@ describe("Perishable", () => {
             handle.release();
             assert(handle.isReleased());
         });
+
+        it("should assert if release() is called twice", () => {
+            var perishable = new tsutil.Perishable(VALUE, sinon.spy(), sinon.spy());
+            var handle = perishable.createHandle(null);
+            handle.release();
+            assert.throws(() => {
+                handle.release();
+            }, /Only release a perishable node once/);
+        });
     });
 
     describe("createHandle", () => {
