@@ -47,10 +47,17 @@ class PerishableNode<T> implements Handle<T> {
     }
 
     release(): void {
+        if (this._isReleased) {
+            throw new Error("Only release a perishable node once");
+        }
         this._prev._setNext(this._next);
         if (this._hasNext()) {
             this._next._setPrev(this._prev);
         }
+        // Perishable nodes should only be released once but in case we strip assertions we want to make sure that we
+        // don't accidentally add _next into _prev's list if we are removed twice.
+        this._prev = null;
+        this._next = null;
         this._isReleased = true;
     }
 
@@ -119,7 +126,7 @@ class Perishable<T> {
     }
 
     /**
-     * Make the reference stale and notify all handles
+     * Make the reference stale and notify all handles. Safe to call more than once.
      */
     makeStale(): void {
         if (!this.isStale()) {
