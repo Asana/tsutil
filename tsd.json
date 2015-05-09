@@ -16,9 +16,6 @@
     },
     "node/node.d.ts": {
       "commit": "84db5f1b5934ab9048185e784a34c545f1d705af"
-    },
-    "dts-bundle/dts-bundle.d.ts": {
-      "commit": "2520bce9a8a71b66e67487cbd5b33fec880b0c55"
     }
   }
 }

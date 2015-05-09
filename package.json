@@ -8,12 +8,15 @@
     "*.d.ts"
   ],
   "scripts": {
-    "bundle": "npm run clean && npm run compile && mv _build/src/** . && node _build/tools/bundle.js",
-    "clean": "rm -rf _build coverage doc",
+    "prebundle": "npm run compile && mv _build/src/** .",
+    "bundle": "dts-generator --name tsutil --main index.d.ts --baseDir . --exclude node_modules/dts-generator/node_modules/typescript/bin/lib.es6.d.ts --out tsutil.d.ts  *.d.ts",
+    "postbundle": "find . -type f -name '*.d.ts' -maxdepth 1 | grep --invert-match 'tsutil.d.ts' | xargs rm",
+    "clean": "rm -rf _build coverage",
+    "precompile": "npm run clean",
     "compile": "tsc",
     "coverage": "cat ./coverage/lcov.info | coveralls",
     "lint": "find src test -name \"*.ts\" | sed 's/^/--file=/g' | xargs tslint",
-    "pretest": "npm run compile -- --sourceMap & npm run lint",
+    "pretest": "npm run compile & npm run lint",
     "test": "istanbul cover _mocha -- --reporter $npm_package_config_reporter --slow 10 --ui bdd --recursive _build/test",
     "posttest": "istanbul check-coverage --statements 100 --branches 95 --functions 100 --lines 100",
     "typings": "tsd reinstall && tsd rebundle"
@@ -48,15 +51,13 @@
   "devDependencies": {
     "chai": "^2.3.0",
     "coveralls": "^2.11.2",
-    "dts-bundle": "^0.2.0",
+    "dts-generator": "^1.4.1",
     "istanbul": "^0.3.13",
     "mocha": "^2.2.4",
     "sinon": "^1.14.1",
-    "source-map-support": "^0.2.10",
     "tsd": "^0.6.0-beta.5",
     "tslint": "^2.2.0-beta",
-    "typescript": "^1.5.0-beta",
-    "typescript-formatter": "^0.3.2"
+    "typescript": "^1.5.0-beta"
   },
   "typescript": {
     "definition": "tsutil.d.ts"
