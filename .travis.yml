@@ -2,11 +2,13 @@ after_success:
 - npm run coverage
 before_script:
 - npm run typings
-- npm config set tsutil:reporter spec
 cache:
   directories:
   - node_modules
   - typings
+env:
+  global:
+  - MOCHA_REPORTER=spec
 language: node_js
 node_js:
 - '0.12'
