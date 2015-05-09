@@ -8,6 +8,7 @@
     "*.d.ts"
   ],
   "scripts": {
+    "bundle": "npm run clean && npm run compile && mv _build/src/** . && node _build/tools/bundle.js",
     "clean": "rm -rf _build coverage doc",
     "compile": "tsc",
     "coverage": "cat ./coverage/lcov.info | coveralls",

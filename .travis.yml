@@ -11,6 +11,8 @@ language: node_js
 node_js:
 - '0.12'
 sudo: false
+before_deploy:
+- npm run bundle
 deploy:
   provider: npm
   email: pspeter333@gmail.com
