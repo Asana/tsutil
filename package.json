@@ -8,9 +8,15 @@
     "*.d.ts"
   ],
   "scripts": {
-    "bundle": "gulp bundle",
-    "doc": "gulp doc",
-    "test": "gulp test"
+    "clean": "rm -rf _build coverage doc",
+    "compile": "tsc",
+    "doc": "typedoc --hideGenerator --mode modules --module commonjs --out doc --theme minimal src/**.ts",
+    "format": "tsfmt --replace",
+    "lint": "find src test -name \"*.ts\" | sed 's/^/--file=/g' | xargs tslint",
+    "pretest": "npm run compile -- --sourceMap & npm run lint",
+    "test": "istanbul cover _mocha -- --reporter nyan --slow 10 --ui bdd --recursive _build/test",
+    "posttest": "istanbul check-coverage --statements 100 --branches 95 --functions 100 --lines 100",
+    "typings": "tsd reinstall && tsd rebundle"
   },
   "repository": {
     "type": "git",
@@ -40,24 +46,21 @@
   },
   "homepage": "https://github.com/Asana/tsutil",
   "devDependencies": {
-    "chai": "^2.1.0",
-    "del": "^1.1.1",
+    "chai": "^2.3.0",
     "dts-bundle": "^0.2.0",
-    "event-stream": "^3.2.2",
-    "glob": "^4.4.0",
-    "gulp": "^3.8.11",
-    "gulp-gh-pages": "^0.4.0",
-    "gulp-istanbul": "^0.5.0",
-    "gulp-mocha": "^2.0.0",
-    "gulp-replace": "^0.5.3",
-    "gulp-tslint": "^1.4.3",
-    "gulp-typedoc": "^1.0.6",
-    "gulp-typescript": "^2.4.2",
-    "sinon": "^1.12.2",
-    "typescript-formatter": "^0.1.4",
-    "typescript-require": "pspeter3/typescript-require"
+    "istanbul": "^0.3.13",
+    "mocha": "^2.2.4",
+    "sinon": "^1.14.1",
+    "source-map-support": "^0.2.10",
+    "tsd": "^0.6.0-beta.5",
+    "tslint": "^2.2.0-beta",
+    "typedoc": "^0.3.4",
+    "typescript": "^1.5.0-beta",
+    "typescript-formatter": "^0.3.2"
   },
   "typescript": {
     "definition": "tsutil.d.ts"
+  },
+  "config": {
   }
 }

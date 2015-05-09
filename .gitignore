@@ -32,8 +32,8 @@ typings
 
 # Artifacts
 _build
-_cache
 doc
+*.js
 
 # IntelliJ
 .idea

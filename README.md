@@ -1,4 +1,6 @@
-# tsutil [![NPM Version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url]
+# tsutil
+
+[![NPM Version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url]
 
 TypeScript Utility Data Structures.
 

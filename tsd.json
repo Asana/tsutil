@@ -14,47 +14,8 @@
     "sinon/sinon.d.ts": {
       "commit": "84db5f1b5934ab9048185e784a34c545f1d705af"
     },
-    "gulp/gulp.d.ts": {
-      "commit": "84db5f1b5934ab9048185e784a34c545f1d705af"
-    },
     "node/node.d.ts": {
       "commit": "84db5f1b5934ab9048185e784a34c545f1d705af"
-    },
-    "del/del.d.ts": {
-      "commit": "84db5f1b5934ab9048185e784a34c545f1d705af"
-    },
-    "glob/glob.d.ts": {
-      "commit": "84db5f1b5934ab9048185e784a34c545f1d705af"
-    },
-    "minimatch/minimatch.d.ts": {
-      "commit": "84db5f1b5934ab9048185e784a34c545f1d705af"
-    },
-    "gulp-tslint/gulp-tslint.d.ts": {
-      "commit": "84db5f1b5934ab9048185e784a34c545f1d705af"
-    },
-    "vinyl/vinyl.d.ts": {
-      "commit": "84db5f1b5934ab9048185e784a34c545f1d705af"
-    },
-    "dts-bundle/dts-bundle.d.ts": {
-      "commit": "84db5f1b5934ab9048185e784a34c545f1d705af"
-    },
-    "gulp-typescript/gulp-typescript.d.ts": {
-      "commit": "84db5f1b5934ab9048185e784a34c545f1d705af"
-    },
-    "gulp-istanbul/gulp-istanbul.d.ts": {
-      "commit": "84db5f1b5934ab9048185e784a34c545f1d705af"
-    },
-    "gulp-mocha/gulp-mocha.d.ts": {
-      "commit": "84db5f1b5934ab9048185e784a34c545f1d705af"
-    },
-    "gulp-typedoc/gulp-typedoc.d.ts": {
-      "commit": "84db5f1b5934ab9048185e784a34c545f1d705af"
-    },
-    "gulp-gh-pages/gulp-gh-pages.d.ts": {
-      "commit": "84db5f1b5934ab9048185e784a34c545f1d705af"
-    },
-    "gulp-replace/gulp-replace.d.ts": {
-      "commit": "57340eca1e3aac68d59cc981b441da834ca38235"
     }
   }
 }
