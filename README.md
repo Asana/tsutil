@@ -29,6 +29,7 @@ lint and test. For a sanity check
 git clone git@github.com:Asana/tsutil.git
 cd tsutil
 npm install
+npm run typings
 npm test
 ```
 
