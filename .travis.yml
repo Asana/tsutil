@@ -1,5 +1,6 @@
 before_script:
 - npm run typings
+- npm config set tsutil:reporter spec
 cache:
   directories:
   - node_modules
