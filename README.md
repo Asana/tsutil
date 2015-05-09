@@ -1,6 +1,6 @@
 # tsutil
 
-[![NPM Version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url]
+[![NPM Version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage][coveralls-image]][coveralls-url]
 
 TypeScript Utility Data Structures.
 
@@ -37,3 +37,6 @@ npm test
 
 [travis-url]: http://travis-ci.org/Asana/tsutil
 [travis-image]: http://img.shields.io/travis/Asana/tsutil.svg?style=flat-square
+
+[coveralls-url]: https://coveralls.io/r/Asana/tsutil
+[coveralls-image]: https://img.shields.io/coveralls/Asana/tsutil/master.svg?style=flat-square

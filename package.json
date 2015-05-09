@@ -10,6 +10,7 @@
   "scripts": {
     "clean": "rm -rf _build coverage doc",
     "compile": "tsc",
+    "coverage": "cat ./coverage/lcov.info | coveralls",
     "lint": "find src test -name \"*.ts\" | sed 's/^/--file=/g' | xargs tslint",
     "pretest": "npm run compile -- --sourceMap & npm run lint",
     "test": "istanbul cover _mocha -- --reporter $npm_package_config_reporter --slow 10 --ui bdd --recursive _build/test",
@@ -45,6 +46,7 @@
   "homepage": "https://github.com/Asana/tsutil",
   "devDependencies": {
     "chai": "^2.3.0",
+    "coveralls": "^2.11.2",
     "dts-bundle": "^0.2.0",
     "istanbul": "^0.3.13",
     "mocha": "^2.2.4",
