@@ -10,8 +10,6 @@
   "scripts": {
     "clean": "rm -rf _build coverage doc",
     "compile": "tsc",
-    "doc": "typedoc --hideGenerator --mode modules --module commonjs --out doc --theme minimal src/**.ts",
-    "format": "tsfmt --replace",
     "lint": "find src test -name \"*.ts\" | sed 's/^/--file=/g' | xargs tslint",
     "pretest": "npm run compile -- --sourceMap & npm run lint",
     "test": "istanbul cover _mocha -- --reporter $npm_package_config_reporter --slow 10 --ui bdd --recursive _build/test",
@@ -54,7 +52,6 @@
     "source-map-support": "^0.2.10",
     "tsd": "^0.6.0-beta.5",
     "tslint": "^2.2.0-beta",
-    "typedoc": "^0.3.4",
     "typescript": "^1.5.0-beta",
     "typescript-formatter": "^0.3.2"
   },

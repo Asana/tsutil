@@ -19,10 +19,6 @@ Install with npm
 npm install tsutil --save
 ```
 
-## Documentation
-
-The code is documented via TypeDoc [here][doc]
-
 ## Contributing
 
 Feel free to fork and submit pull requests for the code. Please follow the
@@ -41,5 +37,3 @@ npm test
 
 [travis-url]: http://travis-ci.org/Asana/tsutil
 [travis-image]: http://img.shields.io/travis/Asana/tsutil.svg?style=flat-square
-
-[doc]: http://asana.github.io/tsutil
