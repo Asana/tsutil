@@ -1,10 +1,12 @@
-before_install:
-- npm install -g tsd@0.6.0-beta.5
-- tsd reinstall --overwrite
-- tsd rebundle
+after_success:
+- npm run coverage
+before_script:
+- npm run typings
+- npm config set tsutil:reporter spec
 cache:
   directories:
   - node_modules
+  - typings
 language: node_js
 node_js:
 - '0.12'
@@ -20,10 +22,3 @@ deploy:
   on:
     branch: master
     repo: Asana/tsutil
-after_deploy:
-- git config --global user.email "git@asana.com"
-- git config --global user.name "Asana"
-- npm run doc
-env:
-  global:
-    secure: JGg/anMqdy4Jhk+HYSM+rTdTMi1i0HKu10sn7NoKWKtqinSSEb4q5sJP19RWz/ng/sYYK5SwYY3DYRPFkVxfopVedr0Uz3by9NojNHOEr8FKN+YQMRcvqa94p9RB4SuiF8Fp405vXW4JlhBlx/YxQHcs+BKjDQT88xM8TS0iqGM=

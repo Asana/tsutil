@@ -1,0 +1,47 @@
+{
+    "version": "1.5.0-beta",
+    "compilerOptions": {
+        "declaration": true,
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "outDir": "_build",
+        "target": "es5"
+    },
+    "compileOnSave": false,
+    "filesGlob": [
+        "./**/*.ts",
+        "!./node_modules/**/*.ts",
+        "!./_build/**/*.ts",
+        "!./*.ts"
+    ],
+    "files": [
+        "./src/arrayFind.ts",
+        "./src/collections.ts",
+        "./src/either.ts",
+        "./src/handle.ts",
+        "./src/identity.ts",
+        "./src/index.ts",
+        "./src/map.ts",
+        "./src/optional.ts",
+        "./src/perishable.ts",
+        "./src/releasable.ts",
+        "./src/set.ts",
+        "./src/try.ts",
+        "./src/unit.ts",
+        "./test/arrayFind_spec.ts",
+        "./test/collections_spec.ts",
+        "./test/either_spec.ts",
+        "./test/identity_spec.ts",
+        "./test/optional_spec.ts",
+        "./test/perishable_spec.ts",
+        "./test/try_spec.ts",
+        "./test/unit_spec.ts",
+        "./tools/bundle.ts",
+        "./typings/chai/chai.d.ts",
+        "./typings/dts-bundle/dts-bundle.d.ts",
+        "./typings/mocha/mocha.d.ts",
+        "./typings/node/node.d.ts",
+        "./typings/sinon/sinon.d.ts",
+        "./typings/tsd.d.ts"
+    ]
+}

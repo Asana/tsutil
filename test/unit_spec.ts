@@ -24,13 +24,13 @@ describe("Unit", () => {
         });
     });
 
-    // This test is commented out because it intentionally does
-    // not compile. To test this correctly, we would pull in the
-    // Typescript compiler and try to compile some code, but that
-    // seemed like overkill.
-    // it("should not compile when a non-Unit object is assigned to a Unit variable", () => {
-    //     /* tslint:disable no-unused-variable */
-    //     var unit: tsutil.Unit = {};
-    //     /* tslint:enable no-unused-variable */
-    // });
+    /**
+     * This test is commented out because it intentionally does
+     * not compile. To test this correctly, we would pull in the
+     * Typescript compiler and try to compile some code, but that
+     * seemed like overkill.
+     * it("should not compile when a non-Unit object is assigned to a Unit variable", () => {
+     *     var unit: tsutil.Unit = {};
+     * });
+     */
 });
