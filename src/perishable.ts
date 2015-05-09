@@ -54,8 +54,10 @@ class PerishableNode<T> implements Handle<T> {
         if (this._hasNext()) {
             this._next._setPrev(this._prev);
         }
-        // Perishable nodes should only be released once but in case we strip assertions we want to make sure that we
-        // don't accidentally add _next into _prev's list if we are removed twice.
+        /**
+         * Perishable nodes should only be released once but in case we strip assertions we want to make sure that we
+         * don't accidentally add _next into _prev's list if we are removed twice.
+         */
         this._prev = null;
         this._next = null;
         this._isReleased = true;
