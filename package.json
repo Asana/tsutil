@@ -4,7 +4,7 @@
   "description": "TypeScript Utility Data Structures",
   "main": "index.js",
   "files": [
-    "typescript-starter.d.ts",
+    "tsutil.d.ts",
     "**/*.js",
     "!**/*_test.js",
     "!build/**/*.js",
