@@ -4,21 +4,21 @@ import tsutil = require("../src/index");
 var arrayFind = tsutil.arrayFind;
 var assert = chai.assert;
 
-describe("arrayFind", () => {
+suite("arrayFind", () => {
 
     var list: number[] = [5, 10, 15, 20];
 
-    it("should find item by predicate", function() {
+    test("should find item by predicate", function() {
         var result = arrayFind(list, (x) => x === 15);
         assert.equal(result, 15);
     });
 
-    it("should return undefined when nothing matched", function() {
+    test("should return undefined when nothing matched", function() {
         var result = arrayFind(list, (x) => x === -1);
         assert.equal(result, undefined);
     });
 
-    it("should receive all three parameters", function() {
+    test("should receive all three parameters", function() {
         arrayFind(list, (value, index, arr) => {
             assert.equal(list[index], value);
             assert.equal(list, arr);
@@ -26,7 +26,7 @@ describe("arrayFind", () => {
         });
     });
 
-    it("should work with the context argument", function() {
+    test("should work with the context argument", function() {
         var context = {};
         arrayFind([1], function() {
             assert.equal(this, context);
@@ -34,7 +34,7 @@ describe("arrayFind", () => {
         }, context);
     });
 
-    it("should work with a sparse array", function() {
+    test("should work with a sparse array", function() {
         var obj = [1, , undefined];
         assert.isFalse(1 in obj);
         var seen: any[] = [];
