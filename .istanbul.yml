@@ -1,3 +1,0 @@
-instrumentation:
-  root: _build/src
-  include-all-sources: true
