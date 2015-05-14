@@ -16,9 +16,6 @@ coverage
 # Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
 
-# node-waf configuration
-.lock-wscript
-
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
 
@@ -27,13 +24,17 @@ build/Release
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git-
 node_modules
 
+# Users Environment Variables
+.lock-wscript
+
+# TypeScript
+typings
+
+# Artifacts
+_build
+doc
+*.js
+
 # IntelliJ
 .idea
 tsutil.iml
-
-# Artifacts
-build
-*.d.ts
-*.js
-typings
->>>>>>> 059ef000252e380f5517478b89cea6edbc8bb0f2

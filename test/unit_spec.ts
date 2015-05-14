@@ -3,21 +3,21 @@ import tsutil = require("../src/index");
 
 var assert = chai.assert;
 
-suite("Unit", () => {
+describe("Unit", () => {
     beforeEach(() => {
         delete tsutil.Unit._instance;
     });
 
-    suite("#constructor()", () => {
-        test("should return the same instance repeatedly", () => {
+    describe("#constructor()", () => {
+        it("should return the same instance repeatedly", () => {
             var unit0 = new tsutil.Unit();
             var unit1 = new tsutil.Unit();
             assert.equal(unit0, unit1);
         });
     });
 
-    suite("#instance()", () => {
-        test("should return the same instance repeatedly", () => {
+    describe("#instance()", () => {
+        it("should return the same instance repeatedly", () => {
             var unit0 = tsutil.Unit.instance();
             var unit1 = tsutil.Unit.instance();
             assert.equal(unit0, unit1);
@@ -29,7 +29,7 @@ suite("Unit", () => {
      * not compile. To test this correctly, we would pull in the
      * Typescript compiler and try to compile some code, but that
      * seemed like overkill.
-     * test("should not compile when a non-Unit object is assigned to a Unit variable", () => {
+     * it("should not compile when a non-Unit object is assigned to a Unit variable", () => {
      *     var unit: tsutil.Unit = {};
      * });
      */

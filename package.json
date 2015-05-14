@@ -4,25 +4,21 @@
   "description": "TypeScript Utility Data Structures",
   "main": "index.js",
   "files": [
-    "typescript-starter.d.ts",
-    "**/*.js",
-    "!**/*_test.js",
-    "!build/**/*.js",
-    "!coverage/**/*.js",
-    "!node_modules/**/*.js"
+    "*.js",
+    "*.d.ts"
   ],
   "scripts": {
-    "prebundle": "npm run compile && mv build/src/** .",
-    "bundle": "dts-generator --name $npm_package_name --main index.d.ts --baseDir . --exclude node_modules/dts-generator/node_modules/typescript/bin/lib.es6.d.ts -out ${npm_package_name}.d.ts *.d.ts",
-    "clean": "rm -rf build coverage *.js *.d.ts",
+    "prebundle": "npm run compile && mv _build/src/** .",
+    "bundle": "dts-generator --name tsutil --main index.d.ts --baseDir . --exclude node_modules/dts-generator/node_modules/typescript/bin/lib.es6.d.ts --out tsutil.d.ts  *.d.ts",
+    "postbundle": "find . -type f -name '*.d.ts' -maxdepth 1 | grep --invert-match 'tsutil.d.ts' | xargs rm",
+    "clean": "rm -rf _build coverage",
     "precompile": "npm run clean",
-    "compile": "find src test typings -name \"*.ts\" | xargs tsc --declaration --module commonjs --target es5 --noImplicitAny --outDir build",
-    "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "prelint": "npm run compile -- --sourceMap",
+    "compile": "tsc",
+    "coverage": "cat ./coverage/lcov.info | coveralls",
     "lint": "find src test -name \"*.ts\" | sed 's/^/--file=/g' | xargs tslint",
-    "pretest": "npm run lint && find build -type f -name *.js -exec sed -i .bak -e '1s/^var __extends/\\/\\* istanbul ignore next \\*\\/\rvar __extends/; 1s/^/require(\"source-map-support\").install();\r/' {} \\;",
-    "test": "istanbul cover _mocha -- --reporter ${MOCHA_REPORTER-nyan} --slow 10 --ui tdd --recursive build/**/*_test.js",
-    "posttest": "istanbul check-coverage --statements 100 --branches 100 --functions 100 --lines 100",
+    "pretest": "npm run compile & npm run lint",
+    "test": "istanbul cover _mocha -- --reporter ${MOCHA_REPORTER-nyan} --slow 10 --ui bdd --recursive _build/test",
+    "posttest": "istanbul check-coverage --statements 100 --branches 95 --functions 100 --lines 100",
     "typings": "tsd reinstall && tsd rebundle"
   },
   "repository": {
@@ -56,13 +52,12 @@
     "chai": "^2.3.0",
     "coveralls": "^2.11.2",
     "dts-generator": "^1.4.1",
-    "istanbul": "^0.3.14",
+    "istanbul": "^0.3.13",
     "mocha": "^2.2.4",
     "sinon": "^1.14.1",
-    "source-map-support": "^0.2.10",
     "tsd": "^0.6.0-beta.5",
-    "tslint": "^2.1.1",
-    "typescript": "^1.4.1"
+    "tslint": "^2.2.0-beta",
+    "typescript": "^1.5.0-beta"
   },
   "typescript": {
     "definition": "tsutil.d.ts"

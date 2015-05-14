@@ -4,12 +4,12 @@ import sinon = require("sinon");
 
 var assert = chai.assert;
 
-suite("Optional", () => {
+describe("Optional", () => {
     var VALUE = "asana";
     var OTHER = "luna";
 
-    suite("#flatten", () => {
-        test("should only include non empty optionals", () => {
+    describe("#flatten", () => {
+        it("should only include non empty optionals", () => {
             var optionals = [
                 new tsutil.Optional(2),
                 tsutil.Optional.NONE,
@@ -19,70 +19,70 @@ suite("Optional", () => {
         });
     });
 
-    suite("constructor", () => {
-        test("should return NONE for undefined", () => {
+    describe("constructor", () => {
+        it("should return NONE for undefined", () => {
             assert.equal(new tsutil.Optional<any>(undefined), tsutil.Optional.NONE);
         });
 
-        test("should return NONE for null", () => {
+        it("should return NONE for null", () => {
             assert.equal(new tsutil.Optional<any>(null), tsutil.Optional.NONE);
         });
 
-        test("should return a new optional for defined", () => {
+        it("should return a new optional for defined", () => {
             var optional = new tsutil.Optional(VALUE);
             assert.notEqual(optional, tsutil.Optional.NONE);
         });
     });
 
-    suite("isEmpty", () => {
-        test("should return true for undefined", () => {
+    describe("isEmpty", () => {
+        it("should return true for undefined", () => {
             var optional = new tsutil.Optional(undefined);
             assert.isTrue(optional.isEmpty());
         });
 
-        test("should return true for null", () => {
+        it("should return true for null", () => {
             var optional = new tsutil.Optional(null);
             assert.isTrue(optional.isEmpty());
         });
 
-        test("should return false for a value", () => {
+        it("should return false for a value", () => {
             var optional = new tsutil.Optional(VALUE);
             assert.isFalse(optional.isEmpty());
         });
     });
 
-    suite("isNonEmpty", () => {
-        test("should return false for undefined", () => {
+    describe("isNonEmpty", () => {
+        it("should return false for undefined", () => {
             var optional = new tsutil.Optional(undefined);
             assert.isFalse(optional.isNonEmpty());
         });
 
-        test("should return false for null", () => {
+        it("should return false for null", () => {
             var optional = new tsutil.Optional(null);
             assert.isFalse(optional.isNonEmpty());
         });
 
-        test("should return true for a value", () => {
+        it("should return true for a value", () => {
             var optional = new tsutil.Optional(VALUE);
             assert.isTrue(optional.isNonEmpty());
         });
     });
 
-    suite("filter", () => {
-        test("should return NONE for NONE", () => {
+    describe("filter", () => {
+        it("should return NONE for NONE", () => {
             assert.equal(tsutil.Optional.NONE.filter(() => {
                 return true;
             }), tsutil.Optional.NONE);
         });
 
-        test("should return NONE for false", () => {
+        it("should return NONE for false", () => {
             var optional = new tsutil.Optional(VALUE);
             assert.equal(optional.filter(() => {
                 return false;
             }), tsutil.Optional.NONE);
         });
 
-        test("should return this for true", () => {
+        it("should return this for true", () => {
             var optional = new tsutil.Optional(VALUE);
             assert.equal(optional.filter(() => {
                 return true;
@@ -90,14 +90,14 @@ suite("Optional", () => {
         });
     });
 
-    suite("forEach", () => {
-        test("should not be called for NONE", () => {
+    describe("forEach", () => {
+        it("should not be called for NONE", () => {
             var spy = sinon.spy();
             tsutil.Optional.NONE.forEach(spy);
             sinon.assert.notCalled(spy);
         });
 
-        test("should be called for a value", () => {
+        it("should be called for a value", () => {
             var optional = new tsutil.Optional(VALUE);
             var spy = sinon.spy();
             optional.forEach(spy);
@@ -105,14 +105,14 @@ suite("Optional", () => {
         });
     });
 
-    suite("map", () => {
-        test("should not be called for NONE", () => {
+    describe("map", () => {
+        it("should not be called for NONE", () => {
             var spy = sinon.spy();
             tsutil.Optional.NONE.map(spy);
             sinon.assert.notCalled(spy);
         });
 
-        test("should be called for a value", () => {
+        it("should be called for a value", () => {
             var optional = new tsutil.Optional(VALUE);
             var spy = sinon.stub();
             spy.returns(OTHER);
@@ -122,14 +122,14 @@ suite("Optional", () => {
         });
     });
 
-    suite("flatMap", () => {
-        test("should not be called for NONE", () => {
+    describe("flatMap", () => {
+        it("should not be called for NONE", () => {
             var spy = sinon.spy();
             tsutil.Optional.NONE.flatMap(spy);
             sinon.assert.notCalled(spy);
         });
 
-        test("should be called for a value", () => {
+        it("should be called for a value", () => {
             var optional = new tsutil.Optional(VALUE);
             var spy = sinon.stub();
             var flatten = new tsutil.Optional(OTHER);
@@ -141,41 +141,41 @@ suite("Optional", () => {
         });
     });
 
-    suite("getOrNull", () => {
-        test("should return null for NONE", () => {
+    describe("getOrNull", () => {
+        it("should return null for NONE", () => {
             var value = tsutil.Optional.NONE.getOrNull();
             assert.equal(value, null);
         });
 
-        test("should return the value", () => {
+        it("should return the value", () => {
             var optional = new tsutil.Optional(VALUE);
             var value = optional.getOrNull();
             assert.equal(value, VALUE);
         });
     });
 
-    suite("getOrThrow", () => {
-        test("should throw for NONE", () => {
+    describe("getOrThrow", () => {
+        it("should throw for NONE", () => {
             assert.throws(() => {
                 tsutil.Optional.NONE.getOrThrow();
             }, "Called getOrThrow on an empty Optional");
         });
 
-        test("should return the value", () => {
+        it("should return the value", () => {
             var optional = new tsutil.Optional(VALUE);
             assert.equal(optional.getOrThrow(), VALUE);
         });
     });
 
-    suite("getOrElse", () => {
-        test("should return else for NONE", () => {
+    describe("getOrElse", () => {
+        it("should return else for NONE", () => {
             var other = tsutil.Optional.NONE.getOrElse(() => {
                 return OTHER;
             });
             assert.equal(other, OTHER);
         });
 
-        test("should return the value", () => {
+        it("should return the value", () => {
             var optional = new tsutil.Optional(VALUE);
             var spy = sinon.spy();
             var other = optional.getOrElse(spy);
@@ -184,15 +184,15 @@ suite("Optional", () => {
         });
     });
 
-    suite("orElse", () => {
-        test("should return else for NONE", () => {
+    describe("orElse", () => {
+        it("should return else for NONE", () => {
             var other = tsutil.Optional.NONE.orElse(() => {
                 return new tsutil.Optional(OTHER);
             });
             assert.equal(other.getOrThrow(), OTHER);
         });
 
-        test("should return the value", () => {
+        it("should return the value", () => {
             var optional = new tsutil.Optional(VALUE);
             var spy = sinon.spy();
             var other = optional.orElse(spy);
@@ -201,13 +201,13 @@ suite("Optional", () => {
         });
     });
 
-    suite("toArray", () => {
-        test("should return an empty array for NONE", () => {
+    describe("toArray", () => {
+        it("should return an empty array for NONE", () => {
             var array = tsutil.Optional.NONE.toArray();
             assert.deepEqual(array, []);
         });
 
-        test("should return an array containing the value", () => {
+        it("should return an array containing the value", () => {
             var optional = new tsutil.Optional(VALUE);
             var array = optional.toArray();
             assert.deepEqual(array, [VALUE]);
