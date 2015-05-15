@@ -4,7 +4,7 @@ import tsutil = require("../src/index");
 var assert = chai.assert;
 
 suite("Unit", () => {
-    beforeEach(() => {
+    setup(() => {
         delete tsutil.Unit._instance;
     });
 
