@@ -1,11 +1,11 @@
 /**
  * TsUtil Exports
  */
-export import arrayFind = require("./arrayFind");
 export import collections = require("./collections");
 export import Either = require("./either");
 export import Handle = require("./handle");
 export import identity = require("./identity");
+export import lists = require("./lists");
 export import Map = require("./map");
 export import Optional = require("./optional");
 export import Perishable = require("./perishable");
