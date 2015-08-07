@@ -29,10 +29,10 @@ after_success:
 # Deploy to npm every time a tagged commit happens
 deploy:
   provider: npm
-  email: pspeter333@gmail.com
+  email: npm@ericpelz.com
   skip_cleanup: true
   api_key:
-    secure: ei6thLUz14hk3Eu0Np3bXRozZSD/N/JyLjw0F8I62pdqSsd892dIglBK28VtJHvsxGNoiSQYErAOCWAG2EI9U3XDr6z+xPnBtsI+sPXPyKk4KTToMWz7Qb9W31GgqJzmhebw0mEJccpNj5MrK5aUPie25/ttvNZN95SnnCr8QV0=
+    secure: Nwj9a9z/CpQsz5f7TbJXiILSgjMzoL5fbWmf68eVrJzhOG/VoRIe6uNBcwLnjTn1yB3VhBGEcCbATUmXcbQvTUU4PG4n5V7cGqZe3lhJv+nQpk3NB8MouB2WwK0jyn6LwX4UKWoAts8rMDvtw24Sdl4MxZCAhUDPmPb0rhI7BU8=
   on:
     branch: master
     repo: Asana/tsutil
