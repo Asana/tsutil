@@ -14,21 +14,21 @@ suite("functions", () => {
 
     suite("noop", () => {
         test("can be called with no arguments", () => {
-            assert.isNull(functions.noop());
+            assert.isUndefined(functions.noop());
         });
 
         test("can be called with two arguments", () => {
-            assert.isNull(functions.noop({}, {}));
+            assert.isUndefined(functions.noop({}, {}));
         });
 
         test("can be called for a fake expected return type", () => {
             var result: { fake_type: number } = functions.noop();
-            assert.isNull(result);
+            assert.isUndefined(result);
         });
 
         test("can be called for a void expected return type", () => {
             var func: () => void = functions.noop;
-            assert.isNull(func());
+            assert.isUndefined(func());
         });
     });
 });

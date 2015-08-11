@@ -13,5 +13,5 @@ export function identity<T>(value: T): T {
  * @returns {any}
  */
 export function noop(...args: any[]): any {
-    return null;
+    return undefined;
 }
