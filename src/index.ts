@@ -3,8 +3,8 @@
  */
 export import collections = require("./collections");
 export import Either = require("./either");
+export import functions = require("./functions");
 export import Handle = require("./handle");
-export import identity = require("./identity");
 export import lists = require("./lists");
 export import Map = require("./map");
 export import Optional = require("./optional");
