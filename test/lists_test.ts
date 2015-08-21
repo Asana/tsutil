@@ -78,4 +78,24 @@ suite("lists", () => {
             assert.isFalse(lists.isEmpty([undefined]));
         });
     });
+
+    suite("dedupeLists", () => {
+        var hashInt = (i: Number) => {
+            return i.toString();
+        };
+
+        test("should noop for empty list", () => {
+            assert.deepEqual([], lists.dedupeLists([], hashInt));
+        });
+
+        test("should noop for unduped list", () => {
+            assert.deepEqual(lists.dedupeLists([[1, 2], [], [3], [4]], hashInt),
+                [[1, 2], [], [3], [4]]);
+        });
+
+        test("picks the first occurrence in the first list", () => {
+            assert.deepEqual(lists.dedupeLists([[1], [2, 3], [1, 2]], hashInt),
+                [[1], [2, 3], []]);
+        });
+    });
 });

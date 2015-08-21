@@ -1,3 +1,6 @@
+import Set = require("./set");
+import collections = require("./collections");
+
 /**
  * find([1,2,3,4,5], (x) => x === 3);
  *
@@ -40,4 +43,29 @@ export function includes<T>(list: T[], element: T): boolean {
  */
 export function isEmpty<T>(list: T[]): boolean {
     return list.length === 0;
+}
+
+/**
+ * Dedupes a list of lists, choosing the first occurrence of each element from
+ * the first list it appears in
+ */
+export function dedupeLists<T>(listOfLists: T[][], hash: (obj: T) => string): T[][] {
+    var all: Set = {};
+    var resultList: T[][] = [];
+
+    listOfLists.forEach((list) => {
+        var results: T[] = [];
+
+        list.forEach((obj) => {
+            var key = hash(obj);
+            if (collections.get(all, key).isEmpty()) {
+                all[key] = true;
+                results.push(obj);
+            }
+        });
+
+        resultList.push(results);
+    });
+
+    return resultList;
 }
